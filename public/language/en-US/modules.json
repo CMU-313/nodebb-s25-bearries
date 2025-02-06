@@ -101,6 +101,7 @@
     "composer.formatting.picture": "Image Link",
     "composer.upload-picture": "Upload Image",
     "composer.upload-file": "Upload File",
+    "composer.post-anonymously": "Post Anonymously",
     "composer.zen-mode": "Zen Mode",
     "composer.select-category": "Select a category",
     "composer.textarea.placeholder": "Enter your post content here, drag and drop images",

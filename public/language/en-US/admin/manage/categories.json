@@ -32,6 +32,7 @@
 	"optional-clone-settings": "(Optional) Clone Settings From Category",
 	"clone-children": "Clone Children Categories And Settings",
 	"purge": "Purge Category",
+	"post-anonymously": "Post Anonymously",
 
 	"enable": "Enable",
 	"disable": "Disable",
