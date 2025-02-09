@@ -27,6 +27,7 @@ async function setup(initConfig) {
 		configFile = path.resolve(paths.baseDir, config);
 	}
 
+	console.log('===000===000=== SETTING UP');
 	const data = await install.setup();
 
 	prestart.loadConfig(configFile);
