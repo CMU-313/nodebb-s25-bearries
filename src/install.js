@@ -423,6 +423,26 @@ async function createGlobalModeratorsGroup() {
 	await groups.show('Global Moderators');
 }
 
+async function createInstructorsGroup() {
+	console.log('===000===000===CREATING INSTRUCTORS');
+	const groups = require('./groups');
+	const exists = await groups.exists('Instructors');
+	if (exists) {
+		winston.info('Instructor group found, skipping creation!');
+	} else {
+		await groups.create({
+			name: 'Instructors',
+			userTitle: 'Instructor',
+			userTitleEnabled: 1,
+			description: 'Professors and TAs',
+			hidden: 0,
+			private: 1,
+			disableJoinRequests: 1,
+		});
+	}
+	await groups.show('Instructors');
+}
+
 async function giveGlobalPrivileges() {
 	const privileges = require('./privileges');
 	const defaultPrivileges = [
@@ -431,9 +451,10 @@ async function giveGlobalPrivileges() {
 		'groups:local:login',
 	];
 	await privileges.global.give(defaultPrivileges, 'registered-users');
+	await privileges.global.give(defaultPrivileges.concat(['groups:view:users:info']), 'Instructors');
+	console.log('===000===000===GAVE INSTRUCTORS PERMS');
 	await privileges.global.give(defaultPrivileges.concat([
-		'groups:ban', 'groups:upload:post:file', 'groups:view:users:info',
-	]), 'Global Moderators');
+		'groups:ban', 'groups:upload:post:file']), 'Global Moderators');
 	await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:view:groups'], 'guests');
 	await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:view:groups'], 'spiders');
 }
@@ -587,6 +608,7 @@ install.setup = async function () {
 		await createDefaultUserGroups();
 		const adminInfo = await createAdministrator();
 		await createGlobalModeratorsGroup();
+		await createInstructorsGroup();
 		await giveGlobalPrivileges();
 		await createMenuItems();
 		await createWelcomePost();
