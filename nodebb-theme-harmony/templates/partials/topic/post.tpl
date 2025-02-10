@@ -98,7 +98,13 @@
 		<a component="post/quote" href="#" class="btn-ghost-sm {{{ if !privileges.topics:reply }}}hidden{{{ end }}}" title="[[topic:quote]]"><i class="fa fa-fw fa-quote-right text-primary"></i></a>
 
 		{{{ if !reputation:disabled }}}
-		<div class="d-flex votes align-items-center">
+			<div class="d-flex votes align-items-center">
+				<div class="post-reactions d-flex gap-2 me-2">
+				<button class="reaction-icon" data-reaction="haha" title="Haha">😂</button>
+				<button class="reaction-icon" data-reaction="pointup" title="Point Up">☝️</button>
+				<button class="reaction-icon" data-reaction="question" title="Question">❓</button>
+				<button class="reaction-icon" data-reaction="eyes" title="Eyes">👀</button>
+			</div>
 			<a component="post/upvote" href="#" class="btn-ghost-sm{{{ if posts.upvoted }}} upvoted{{{ end }}}" title="[[topic:upvote-post]]">
 				<i class="fa fa-fw fa-chevron-up text-primary"></i>
 			</a>
@@ -117,6 +123,12 @@
 
 		<!-- IMPORT partials/topic/post-menu.tpl -->
 	</div>
+</div>
+<div class="post-reactions">
+    <button class="reaction-icon" data-reaction="haha">😂</button>
+    <button class="reaction-icon" data-reaction="pointup">☝️</button>
+    <button class="reaction-icon" data-reaction="question">❓</button>
+    <button class="reaction-icon" data-reaction="eyes">👀</button>
 </div>
 {{{ if (!./index && widgets.mainpost-footer.length) }}}
 <div data-widget-area="mainpost-footer">
