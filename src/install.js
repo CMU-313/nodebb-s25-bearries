@@ -457,7 +457,7 @@ async function giveGlobalPrivileges() {
 		'groups:ban', 'groups:upload:post:file', 'create-poll']), 'Global Moderators');
 	await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:view:groups', 'create-poll'], 'guests');
 	await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:view:groups', 'create-poll'], 'spiders');
-	await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:view:groups', 'create-poll'], 'Instructors');
+	await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:upload:post:file', 'groups:view:groups', 'create-poll'], 'Instructors');
 }
 
 async function createCategories() {
