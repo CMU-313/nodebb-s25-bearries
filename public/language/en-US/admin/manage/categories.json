@@ -32,6 +32,8 @@
 	"optional-clone-settings": "(Optional) Clone Settings From Category",
 	"clone-children": "Clone Children Categories And Settings",
 	"purge": "Purge Category",
+	"upload-files": "Upload Files",
+	"create-poll": "Create Poll",
 
 	"enable": "Enable",
 	"disable": "Disable",

@@ -1,7 +1,16 @@
 dist/
 yarn.lock
 npm-debug.log
-node_modules/
+node_modules/*
+!/node_modules/nodebb-plugin-composer-default
+/node_modules/nodebb-plugin-composer-default/*
+!/node_modules/nodebb-plugin-composer-default/static/
+/node_modules/nodebb-plugin-composer-default/static/*
+!/node_modules/nodebb-plugin-composer-default/static/templates/
+/node_modules/nodebb-plugin-composer-default/static/templates/*
+!/node_modules/nodebb-plugin-composer-default/static/templates/partials/
+/node_modules/nodebb-plugin-composer-default/static/templates/partials/*
+!/node_modules/nodebb-plugin-composer-default/static/templates/partials/composer-formatting.tpl
 sftp-config.json
 config.json
 jsconfig.json
