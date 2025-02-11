@@ -424,7 +424,6 @@ async function createGlobalModeratorsGroup() {
 }
 
 async function createInstructorsGroup() {
-	console.log('===000===000===CREATING INSTRUCTORS');
 	const groups = require('./groups');
 	const exists = await groups.exists('Instructors');
 	if (exists) {
@@ -443,6 +442,24 @@ async function createInstructorsGroup() {
 	await groups.show('Instructors');
 }
 
+async function createStudentsGroup() {
+	const groups = require('./groups');
+	const exists = await groups.exists('Students');
+	if (exists) {
+		winston.info('Students group found, skipping creation!');
+	} else {
+		await groups.create({
+			name: 'Students',
+			userTitle: 'Student',
+			userTitleEnabled: 0,
+			hidden: 0,
+			private: 1,
+			disableJoinRequests: 1,
+		});
+	}
+	await groups.show('Students');
+}
+
 async function giveGlobalPrivileges() {
 	const privileges = require('./privileges');
 	const defaultPrivileges = [
@@ -451,8 +468,8 @@ async function giveGlobalPrivileges() {
 		'groups:local:login',
 	];
 	await privileges.global.give(defaultPrivileges, 'registered-users');
+	await privileges.global.give(defaultPrivileges, 'Students');
 	await privileges.global.give(defaultPrivileges.concat(['groups:view:users:info']), 'Instructors');
-	console.log('===000===000===GAVE INSTRUCTORS PERMS');
 	await privileges.global.give(defaultPrivileges.concat([
 		'groups:ban', 'groups:upload:post:file', 'create-poll']), 'Global Moderators');
 	await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:view:groups', 'create-poll'], 'guests');
@@ -610,6 +627,7 @@ install.setup = async function () {
 		const adminInfo = await createAdministrator();
 		await createGlobalModeratorsGroup();
 		await createInstructorsGroup();
+		await createStudentsGroup();
 		await giveGlobalPrivileges();
 		await createMenuItems();
 		await createWelcomePost();

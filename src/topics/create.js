@@ -81,11 +81,14 @@ module.exports = function (Topics) {
 		data = await plugins.hooks.fire('filter:topic.post', data);
 		const { uid } = data;
 
-		const [categoryExists, canCreate, canTag, isAdmin] = await Promise.all([
+		const [categoryExists, canCreate,
+			canTag, isAdmin, isStudent, isInstructor] = await Promise.all([
 			categories.exists(data.cid),
 			privileges.categories.can('topics:create', data.cid, uid),
 			privileges.categories.can('topics:tag', data.cid, uid),
 			privileges.users.isAdministrator(uid),
+			privileges.users.isStudent(uid),
+			privileges.users.isInstructor(uid),
 		]);
 
 		data.title = String(data.title).trim();
@@ -93,6 +96,13 @@ module.exports = function (Topics) {
 		data.content = String(data.content || '').trimEnd();
 		if (!isAdmin) {
 			Topics.checkTitle(data.title);
+		}
+
+		if (isStudent) {
+			data.tags.push('unresolved');
+		}
+		if (isInstructor) {
+			data.tags.push('instructor-post');
 		}
 
 		await Topics.validateTags(data.tags, data.cid, uid);
