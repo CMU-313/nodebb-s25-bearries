@@ -1,5 +1,7 @@
 'use strict';
-
+const reactionsContainer = components.get('post/reactions', pid);
+const hahaReactionIcon = components.get('post/reaction-icon', pid, '😂');
+const reactionCount = components.get('post/reaction-count', pid);
 define('components', function () {
 	const components = {};
 
@@ -58,6 +60,15 @@ define('components', function () {
 		'chat/recent/room': function (roomid) {
 			return $('[component="chat/recent/room"][data-roomid="' + roomid + '"]');
 		},
+		'post/reactions': function (pid) {
+        return $('[component="post"][data-pid="' + pid + '"] [component="post/reactions"]');
+    },
+    'post/reaction-icon': function (pid, reaction) {
+        return $('[component="post"][data-pid="' + pid + '"] [component="post/reaction-icon"][data-reaction="' + reaction + '"]');
+    },
+    'post/reaction-count': function (pid) {
+        return $('[component="post"][data-pid="' + pid + '"] [component="post/reaction-count"]');
+    },
 	};
 
 	components.get = function () {

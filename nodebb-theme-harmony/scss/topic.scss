@@ -71,8 +71,29 @@ body.template-topic {
 					}
 				}
 			}
+		/* New styles for reactions UI */
+		.post-reactions {
+			display: flex;
+			gap: 5px;
+			align-items: center;
+			margin-right: 10px; /* Adds spacing between reactions and upvote button */
 		}
+
+		.reaction-icon {
+			border: none;
+			background: transparent;
+			cursor: pointer;
+			font-size: 16px;
+			transition: transform 0.2s ease;
+		}
+
+		.reaction-icon:hover {
+			transform: scale(1.2); /* Slight zoom effect on hover */
+		}
+		/* End of new styles for reactions UI */
 	}
+}
+
 
 	.quick-reply {
 		@include topic-avatars();

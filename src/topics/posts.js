@@ -14,6 +14,90 @@ const utils = require('../utils');
 
 const backlinkRegex = new RegExp(`(?:${nconf.get('url').replace('/', '\\/')}|\b|\\s)\\/topic\\/(\\d+)(?:\\/\\w+)?`, 'g');
 
+const db = require('../database');
+const user = require('../user');
+const plugins = require('../plugins');
+
+
+module.exports = function (Posts) {
+    // Add a reaction to a post
+    Posts.addReaction = async function (pid, uid, reaction) {
+        // Validate reaction (e.g., ensure it's one of the allowed emojis)
+        const allowedReactions = ['😂', '👆', '❓', '👀'];
+        if (!allowedReactions.includes(reaction)) {
+            throw new Error('[[error:invalid-reaction]]');
+        }
+
+        // Store the reaction in the database
+        await db.sortedSetAdd(`pid:${pid}:reactions`, Date.now(), `${uid}:${reaction}`);
+
+        // Emit a hook for plugins (optional)
+        await plugins.hooks.fire('action:post.addReaction', { pid, uid, reaction });
+
+        // Return the updated reaction count for the post
+        return await Posts.getReactionCount(pid);
+    };
+
+    // Remove a reaction from a post
+    Posts.removeReaction = async function (pid, uid, reaction) {
+        // Remove the reaction from the database
+        await db.sortedSetRemove(`pid:${pid}:reactions`, `${uid}:${reaction}`);
+
+        // Emit a hook for plugins (optional)
+        await plugins.hooks.fire('action:post.removeReaction', { pid, uid, reaction });
+
+        // Return the updated reaction count for the post
+        return await Posts.getReactionCount(pid);
+    };
+
+    // Get all reactions for a post
+    Posts.getReactions = async function (pid) {
+        // Retrieve all reactions from the database
+        const reactions = await db.getSortedSetRangeWithScores(`pid:${pid}:reactions`, 0, -1);
+
+        // Format the reactions into a more usable structure
+        const reactionData = reactions.map(r => {
+            const [uid, reaction] = r.value.split(':');
+            return {
+                uid: parseInt(uid, 10),
+                reaction,
+                timestamp: r.score,
+            };
+        });
+
+        return reactionData;
+    };
+
+    // Get the reaction count for a post
+    Posts.getReactionCount = async function (pid) {
+        const count = await db.sortedSetCard(`pid:${pid}:reactions`);
+        return count || 0;
+    };
+
+    // Get reactions by a specific user for a post
+    Posts.getUserReactions = async function (pid, uid) {
+        const reactions = await Posts.getReactions(pid);
+        return reactions.filter(r => r.uid === uid);
+    };
+
+    // Add reaction data to post objects
+    Posts.addReactionData = async function (posts, uid) {
+        if (!Array.isArray(posts) || !posts.length) {
+            return posts;
+        }
+
+        const pids = posts.map(p => p.pid);
+        const reactionData = await Promise.all(pids.map(pid => Posts.getReactions(pid)));
+
+        posts.forEach((post, index) => {
+            post.reactions = reactionData[index];
+            post.userReactions = post.reactions.filter(r => r.uid === uid);
+            post.reactionCount = post.reactions.length;
+        });
+
+        return posts;
+    };
+};
 module.exports = function (Topics) {
 	Topics.onNewPostMade = async function (postData) {
 		await Topics.updateLastPostTime(postData.tid, postData.timestamp);
