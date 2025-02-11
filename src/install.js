@@ -454,9 +454,10 @@ async function giveGlobalPrivileges() {
 	await privileges.global.give(defaultPrivileges.concat(['groups:view:users:info']), 'Instructors');
 	console.log('===000===000===GAVE INSTRUCTORS PERMS');
 	await privileges.global.give(defaultPrivileges.concat([
-		'groups:ban', 'groups:upload:post:file']), 'Global Moderators');
-	await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:view:groups'], 'guests');
-	await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:view:groups'], 'spiders');
+		'groups:ban', 'groups:upload:post:file', 'create-poll']), 'Global Moderators');
+	await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:view:groups', 'create-poll'], 'guests');
+	await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:view:groups', 'create-poll'], 'spiders');
+	await privileges.global.give(['groups:view:users', 'groups:view:tags', 'groups:view:groups', 'create-poll'], 'Instructors');
 }
 
 async function createCategories() {
