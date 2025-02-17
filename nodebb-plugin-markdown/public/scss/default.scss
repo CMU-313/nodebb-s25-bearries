@@ -1,0 +1,74 @@
+@mixin markdown-highlight {
+	margin-top: 1rem;
+	color: inherit;
+	background-color: inherit;
+	border: none;
+	code {
+		min-width: 100%;
+		max-height: calc($font-size-base * 24);
+	}
+	code[data-lines="1"] {
+		white-space: normal !important;
+	}
+
+	.hljs-ln-line {
+		white-space: pre;
+	}
+
+	.hljs-ln-numbers {
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		color: #ccc;
+		vertical-align: top;
+		/*rtl:begin:ignore*/
+		text-align: right;
+		border-right: 1px solid #CCC;
+		padding-right: 8px;
+		/*rtl:end:ignore*/
+	}
+
+	.hljs-ln-code {
+		/*rtl:begin:ignore*/
+		padding-left: 8px;
+		/*rtl:end:ignore*/
+	}
+}
+
+// Backwards compatibility with themes without components
+.markdown-highlight, .post-content pre, .topic-text pre, .composer .preview pre {
+	@include markdown-highlight;
+}
+
+.markdown-highlight .hljs {
+	display: block;
+}
+
+[component="post/content"], .composer-container .preview {
+	div.plugin-markdown {
+		display: flex;
+
+		input[type="checkbox"] {
+			margin-right: 0.5rem;
+			position: relative;
+			top: 1px;
+
+			&+label {
+				font-weight: unset;
+				flex: 1;
+			}
+		}
+	}
+}
+
+a.plugin-markdown-hidden-link {
+	&::before {
+		content: 'hidden link';
+		border: 1px dashed $danger;
+		padding: .25rem;
+		border-radius: var(--bs-border-radius) !important;
+	}
+}

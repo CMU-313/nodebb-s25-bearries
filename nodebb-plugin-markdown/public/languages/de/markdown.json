@@ -1,0 +1,12 @@
+{
+	"bold": "Fettschrift",
+	"italic": "Kursivschrift",
+	"list-item": "Listenpunkt",
+	"strikethrough-text": "Durchgestrichen",
+	"code-text": "code_text",
+	"link-text": "Link Text",
+	"link-url": "Link Adresse",
+	"picture-text": "Bild Text",
+	"picture-url": "Bild Link",
+	"help-text": "Dieses Forum unterstützt Markdown. <a href=\"http://commonmark.org/help/\" class=\"text-decoration-underline\">Für mehr Informationen, hier klicken.</a>"
+}
