@@ -178,9 +178,10 @@ module.exports = function (Topics) {
 		const { tid } = data;
 		const { uid } = data;
 
-		const [topicData, isAdmin] = await Promise.all([
+		const [topicData, isAdmin, isInstructor] = await Promise.all([
 			Topics.getTopicData(tid),
 			privileges.users.isAdministrator(uid),
+			privileges.users.isInstructor(uid),
 		]);
 
 		await canReply(data, topicData);
@@ -201,6 +202,11 @@ module.exports = function (Topics) {
 		// For replies to scheduled topics, don't have a timestamp older than topic's itself
 		if (topicData.scheduled) {
 			data.timestamp = topicData.lastposttime + 1;
+		}
+
+		if (isInstructor) {
+			console.log('add resolved');
+			Topics.resolveTopics([tid]);
 		}
 
 		data.ip = data.req ? data.req.ip : null;

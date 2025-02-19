@@ -219,6 +219,7 @@ module.exports = function (Topics) {
 	};
 
 	Topics.deleteTags = async function (tags) {
+		console.log('deleteTags');
 		if (!Array.isArray(tags) || !tags.length) {
 			return;
 		}
@@ -246,6 +247,7 @@ module.exports = function (Topics) {
 	};
 
 	async function removeTagsFromTopics(tags) {
+		console.log('removetagsfromtopics');
 		await async.eachLimit(tags, 50, async (tag) => {
 			const tids = await db.getSortedSetRange(`tag:${tag}:topics`, 0, -1);
 			if (!tids.length) {
@@ -272,6 +274,7 @@ module.exports = function (Topics) {
 	}
 
 	Topics.deleteTag = async function (tag) {
+		console.log('deletetag');
 		await Topics.deleteTags([tag]);
 	};
 
@@ -362,12 +365,14 @@ module.exports = function (Topics) {
 	};
 
 	Topics.addTags = async function (tags, tids) {
+		console.log('addtags');
 		const topicData = await Topics.getTopicsFields(tids, ['tid', 'cid', 'timestamp', 'tags']);
 		const bulkAdd = [];
 		const bulkSet = [];
 		topicData.forEach((t) => {
 			const topicTags = t.tags.map(tagItem => tagItem.value);
 			tags.forEach((tag) => {
+				console.log(tag);
 				bulkAdd.push([`tag:${tag}:topics`, t.timestamp, t.tid]);
 				bulkAdd.push([`cid:${t.cid}:tag:${tag}:topics`, t.timestamp, t.tid]);
 				if (!topicTags.includes(tag)) {
@@ -383,6 +388,37 @@ module.exports = function (Topics) {
 
 		await Promise.all(tags.map(updateTagCount));
 		await Topics.updateCategoryTagsCount(_.uniq(topicData.map(t => t.cid)), tags);
+	};
+
+	Topics.resolveTopics = async function (tids) {
+		console.log('resolve thread');
+		const topicData = await Topics.getTopicsFields(tids, ['tid', 'cid', 'tags']);
+		const bulkRemove = [];
+		const bulkAdd = [];
+		const bulkSet = [];
+
+		topicData.forEach((t) => {
+			const topicTags = t.tags.map(tagItem => tagItem.value);
+			bulkAdd.push([`tag:resolved:topics`, t.timestamp, t.tid]);
+			bulkAdd.push([`cid:${t.cid}:tag:resolved:topics`, t.timestamp, t.tid]);
+			bulkRemove.push([`tag:unresolved:topics`, t.tid]);
+			bulkRemove.push([`cid:${t.cid}:tag:unresolved:topics`, t.tid]);
+			if (!topicTags.includes('resolved')) {
+				topicTags.push('resolved');
+			}
+			if (topicTags.includes('unresolved')) {
+				topicTags.splice(topicTags.indexOf('unresolved'), 1);
+			}
+			bulkSet.push([`topic:${t.tid}`, { tags: topicTags.join(',') }]);
+		});
+		await Promise.all([
+			db.sortedSetAddBulk(bulkAdd),
+			db.sortedSetRemoveBulk(bulkRemove),
+			db.setObjectBulk(bulkSet),
+		]);
+
+		await Promise.all(['resolved', 'unresolved'].map(updateTagCount));
+		await Topics.updateCategoryTagsCount(_.uniq(topicData.map(t => t.cid)), ['resolved', 'unresolved']);
 	};
 
 	Topics.removeTags = async function (tags, tids) {
