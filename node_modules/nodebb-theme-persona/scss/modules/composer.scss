@@ -1,0 +1,21 @@
+body.page-compose,
+.page-compose #content,
+.page-compose #panel {
+	height: calc(100vh - var(--panel-offset));
+}
+
+.page-compose .composer .composer-container {
+	border: 0;
+}
+
+.composer {
+	.composer-container {
+		border-top: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+		border-left: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+		border-right: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+	}
+
+	.resizer {
+		border: 0 !important;
+	}
+}

@@ -1,0 +1,11 @@
+{
+	"bold": "متن پررنگ",
+	"italic": "متن ایتالیک ( کج )",
+	"list-item": "لیست",
+	"strikethrough-text": "متن خط خورده",
+	"link-text": "متن لینک",
+	"link-url": "آدرس لینک",
+	"picture-text": "متن جایگزین",
+	"picture-url": "آدرس عکس",
+	"help-text": "این انجمن از زبان مارک دون استفاده می کند، برای اطلاعات بیشتر [اینجا](http://commonmark.org/help/) کلیک کنید!"
+}
