@@ -153,6 +153,8 @@ define('composer/formatting', [
 			iconClass,
 			title,
 		});
+		console.log("CURRENT BUTTONS: --- \n")
+		console.log(buttons)
 	};
 
 	formatting.addDropdown = function (data) {
