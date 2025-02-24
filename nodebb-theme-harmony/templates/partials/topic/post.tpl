@@ -96,7 +96,8 @@
 		<!-- IMPORT partials/topic/reactions.tpl -->
 
 		<a component="post/reactions" href="#" class="btn-ghost-sm" title="[[topic:reactions]]">
-			<i class="fa fa-fw fa-thumbs-up text-primary"></i> Reactions
+			<i class="fa fa-fw fa-smile text-primary"></i>
+			<meta itemprop="upvoteCount" content="{posts.upvotes}">
 		</a>
 
 		<a component="post/reply" href="#" class="btn-ghost-sm {{{ if !privileges.topics:reply }}}hidden{{{ end }}}" title="[[topic:reply]]"><i class="fa fa-fw fa-reply text-primary"></i></a>
