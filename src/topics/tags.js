@@ -219,7 +219,6 @@ module.exports = function (Topics) {
 	};
 
 	Topics.deleteTags = async function (tags) {
-		console.log('deleteTags');
 		if (!Array.isArray(tags) || !tags.length) {
 			return;
 		}
@@ -247,7 +246,6 @@ module.exports = function (Topics) {
 	};
 
 	async function removeTagsFromTopics(tags) {
-		console.log('removetagsfromtopics');
 		await async.eachLimit(tags, 50, async (tag) => {
 			const tids = await db.getSortedSetRange(`tag:${tag}:topics`, 0, -1);
 			if (!tids.length) {
@@ -274,7 +272,6 @@ module.exports = function (Topics) {
 	}
 
 	Topics.deleteTag = async function (tag) {
-		console.log('deletetag');
 		await Topics.deleteTags([tag]);
 	};
 
@@ -365,14 +362,12 @@ module.exports = function (Topics) {
 	};
 
 	Topics.addTags = async function (tags, tids) {
-		console.log('addtags');
 		const topicData = await Topics.getTopicsFields(tids, ['tid', 'cid', 'timestamp', 'tags']);
 		const bulkAdd = [];
 		const bulkSet = [];
 		topicData.forEach((t) => {
 			const topicTags = t.tags.map(tagItem => tagItem.value);
 			tags.forEach((tag) => {
-				console.log(tag);
 				bulkAdd.push([`tag:${tag}:topics`, t.timestamp, t.tid]);
 				bulkAdd.push([`cid:${t.cid}:tag:${tag}:topics`, t.timestamp, t.tid]);
 				if (!topicTags.includes(tag)) {
@@ -415,27 +410,27 @@ module.exports = function (Topics) {
 		await Topics.updateCategoryTagsCount(_.uniq(topicData.map(t => t.cid)), tags);
 	};
 
-	Topics.resolveTopics = async function (tids) {
-		console.log('resolve thread');
-		await Topics.addTags(['resolved'], tids);
-		await Topics.removeTags(['unresolved'], tids);
+	Topics.resolveTopics = async function (tid, tags) {
+		const topicTags = tags.map(tagItem => tagItem.value);
+		if (!topicTags.includes('unresolved')) {
+			return;
+		}
+		topicTags.splice(topicTags.indexOf('unresolved'), 1);
+		topicTags.push('resolved');
+		await Topics.updateTopicTags(tid, topicTags);
+		// websockets.in(`topic_${tid}`).emit('event:topic_resolved', editResult);
 	};
 
 	Topics.updateTopicTags = async function (tid, tags) {
-		console.log('udpate??');
-		console.log(tags);
 		await Topics.deleteTopicTags(tid);
 		const cid = await Topics.getTopicField(tid, 'cid');
 
 		tags = await Topics.filterTags(tags, cid);
-		console.log('new tags?');
-		console.log(tags);
 		await Topics.addTags(tags, [tid]);
 		plugins.hooks.fire('action:topic.updateTags', { tags, tid });
 	};
 
 	Topics.deleteTopicTags = async function (tid) {
-		console.log('deletetopictags');
 		const topicData = await Topics.getTopicFields(tid, ['cid', 'tags']);
 		const { cid } = topicData;
 		const tags = topicData.tags.map(tagItem => tagItem.value);

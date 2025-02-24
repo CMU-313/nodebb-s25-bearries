@@ -205,8 +205,7 @@ module.exports = function (Topics) {
 		}
 
 		if (isInstructor) {
-			console.log('add resolved');
-			Topics.resolveTopics([tid]);
+			await resolveTopic(topicData, topicData.tags);
 		}
 
 		data.ip = data.req ? data.req.ip : null;
@@ -238,6 +237,23 @@ module.exports = function (Topics) {
 
 		return postData;
 	};
+
+	async function resolveTopic(data, tags) {
+		const { tid } = data;
+		// Remove unresolved tag and add resolved tag
+		const topicTags = tags.map(tagItem => tagItem.value);
+		if (!topicTags.includes('unresolved')) {
+			return;
+		}
+		topicTags.splice(topicTags.indexOf('unresolved'), 1);
+		topicTags.push('resolved');
+		await Topics.updateTopicTags([tid], topicTags);
+
+		// Refresh tags
+		tags = await Topics.getTopicTagsObjects(tid);
+		data.tags = tags;
+		websockets.in(`topic_${tid}`).emit('event:topic_resolved', {topic: data});
+	}
 
 	async function onNewPost(postData, data) {
 		const { tid, uid } = postData;

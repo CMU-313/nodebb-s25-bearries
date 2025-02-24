@@ -31,6 +31,8 @@ define('forum/topic/events', [
 
 		'event:topic_moved': onTopicMoved,
 
+		'event:topic_resolved': onTopicResolved,
+
 		'event:post_edited': onPostEdited,
 		'event:post_purged': onPostPurged,
 
@@ -100,7 +102,16 @@ define('forum/topic/events', [
 		}
 	}
 
+	function onTopicResolved(data) {
+		if (data.topic && data.topic.tags){
+			require(['forum/topic/tag'], function (tag) {
+				tag.updateTopicTags([data.topic]);
+			});
+		}
+	}
+
 	function onPostEdited(data) {
+		console.trace();
 		if (!data || !data.post || parseInt(data.post.tid, 10) !== parseInt(ajaxify.data.tid, 10)) {
 			return;
 		}
