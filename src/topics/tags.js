@@ -410,17 +410,6 @@ module.exports = function (Topics) {
 		await Topics.updateCategoryTagsCount(_.uniq(topicData.map(t => t.cid)), tags);
 	};
 
-	Topics.resolveTopics = async function (tid, tags) {
-		const topicTags = tags.map(tagItem => tagItem.value);
-		if (!topicTags.includes('unresolved')) {
-			return;
-		}
-		topicTags.splice(topicTags.indexOf('unresolved'), 1);
-		topicTags.push('resolved');
-		await Topics.updateTopicTags(tid, topicTags);
-		// websockets.in(`topic_${tid}`).emit('event:topic_resolved', editResult);
-	};
-
 	Topics.updateTopicTags = async function (tid, tags) {
 		await Topics.deleteTopicTags(tid);
 		const cid = await Topics.getTopicField(tid, 'cid');
