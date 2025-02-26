@@ -17,8 +17,11 @@ define('forum/topic/events', [
 	const events = {
 		'event:user_status_change': onUserStatusChange,
 		'event:voted': updatePostVotesAndUserReputation,
+
 		// YUKICHANGE: added event linked to class where a person reacted to post
 		'event:reacted': updatePostReactions,
+
+		
 		'event:bookmarked': updateBookmarkCount,
 
 		'event:topic_deleted': threadTools.setDeleteState,
@@ -79,7 +82,7 @@ define('forum/topic/events', [
 	function updatePostReactions(data) {
 		const reactions = $('[data-pid="' + data.post.pid + '"] [component="post/reaction-count"]').filter(function (index, el) {
 			return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10);
-			// reactions.html(data.post.reactions).attr('data-votes', data.post.reactions);
+			reactions.html(data.post.reactions).attr('data-reactions', data.post.reactions);
 		});
 	}
 

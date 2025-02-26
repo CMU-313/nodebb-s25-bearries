@@ -131,6 +131,11 @@ define('forum/topic/postTools', [
 			return reactions.toggleReaction($(this), '.reacted', 1);
 		});
 
+		postContainer.on('click', '[component="post/react-count"]', function () {
+			reactions.showReactions(getData($(this), 'data-pid'));
+		});
+
+
 		postContainer.on('click', '[component="post/bookmark"]', function () {
 			return bookmarkPost($(this), getData($(this), 'data-pid'));
 		});

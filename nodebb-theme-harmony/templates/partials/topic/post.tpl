@@ -102,7 +102,7 @@
 				<i class="fa fa-fw fa-smile text-primary"></i>
 			</a>
 
-			<meta itemprop="reactionCount" content="{posts.upvotes}">
+			<meta itemprop="reactionCount" content="{posts.reactions}">
 			<a href="#" class="px-2 mx-1 btn-ghost-sm" component="post/reaction-count" data-reactions="{posts.reactions}" title="[[global:reactors]]">{posts.reactions}</a>
 		</div>
 
