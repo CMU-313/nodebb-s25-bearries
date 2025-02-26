@@ -1,8 +1,8 @@
 put:
   tags:
-    - posts
+    - reactions
   summary: react on a post
-  description: This operation casts a react on a post.
+  description: This operation reacts to a post.
   parameters:
     - in: path
       name: pid
@@ -50,7 +50,7 @@ delete:
       example: 2
   responses:
     '200':
-      description: Post successfully unreact
+      description: Post successfully unreacted
       content:
         application/json:
           schema:
@@ -61,3 +61,5 @@ delete:
               response:
                 type: object
                 properties: {}
+
+##LYNNCHANGE NEW REACT YAML FILE

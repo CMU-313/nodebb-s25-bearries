@@ -486,6 +486,49 @@ postsAPI.getUpvoters = async function (caller, data) {
 	};
 };
 
+//LYNN CHANGE
+postsAPI.react = async function (caller, data) {
+	return await apiHelpers.postCommand(caller, 'react', 'reacted', '', data);
+};
+
+postsAPI.unreact = async function (caller, data) {
+	return await apiHelpers.postCommand(caller, 'unreact', 'reacted', '', data);
+};
+
+postsAPI.getUpvoters = async function (caller, data) {
+	if (!data.pid) {
+		throw new Error('[[error:invalid-data]]');
+	}
+	const { pid } = data;
+	const cid = await posts.getCidByPid(pid);
+	// if (!await canSeeVotes(caller.uid, cid, 'upvoteVisibility')) {
+	// 	throw new Error('[[error:no-privileges]]');
+	// }
+
+	let upvotedUids = (await posts.getUpvotedUidsByPids([pid]))[0];
+	const cutoff = 6;
+	if (!upvotedUids.length) {
+		return {
+			otherCount: 0,
+			usernames: [],
+			cutoff,
+		};
+	}
+	let otherCount = 0;
+	if (upvotedUids.length > cutoff) {
+		otherCount = upvotedUids.length - (cutoff - 1);
+		upvotedUids = upvotedUids.slice(0, cutoff - 1);
+	}
+
+	const usernames = await user.getUsernamesByUids(upvotedUids);
+	return {
+		otherCount,
+		usernames,
+		cutoff,
+	};
+};
+//LYNN CHANGE
+
 async function canSeeVotes(uid, cids, type) {
 	const isArray = Array.isArray(cids);
 	if (!isArray) {
