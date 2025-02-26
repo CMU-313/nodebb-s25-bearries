@@ -173,6 +173,25 @@ module.exports = function (Posts) {
 		await db.deleteAll(pids.map(pid => `pid:${pid}:users_bookmarked`));
 	}
 
+	// YUKICHANGE: mimics deleteFromUserVotes below to try get updated list of reactors... don't know what this is doing actually
+	async function deleteFromUserReactions(pids) {
+		const [reactors] = await Promise.all([
+			db.getSetsMembers(pids.map(pid => `pid:${pid}:react`)),
+		]);
+		const bulkRemove = [];
+		pids.forEach((pid, index) => {
+			reactors[index].forEach((reactorUID) => {
+				bulkRemove.push([`uid:${reactorUID}:react`, pid]);
+			});
+		});
+		await Promise.all([
+			db.sortedSetRemoveBulk(bulkRemove),
+			db.deleteAll([
+				...pids.map(pid => `pid:${pid}:react`),
+			]),
+		]);
+	}
+
 	async function deleteFromUsersVotes(pids) {
 		const [upvoters, downvoters] = await Promise.all([
 			db.getSetsMembers(pids.map(pid => `pid:${pid}:upvote`)),

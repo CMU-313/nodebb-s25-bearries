@@ -1,0 +1,14 @@
+body.page-user-chats {
+	$calcHeight: calc(100vh - var(--panel-offset));
+
+	> #panel {
+		height: $calcHeight;
+		> .container {
+			height: 100%;
+		}
+	}
+	#content.container {
+		padding-top: 0 !important;
+		padding-bottom: 0 !important;
+	}
+}

@@ -112,6 +112,59 @@ async function mock(req) {
 	return { pid: req.params.pid, room_id: `topic_${tid}` };
 }
 
+//YUKICHANGE: api triggers for react, unreact, getReactors
+Posts.react = async (req, res) => {
+	const data = await mock(req);
+	if (req.body.delta > 0) {
+		await api.posts.react(req, data);
+	} else {
+		await api.posts.unreact(req, data);
+	}
+	helpers.formatApiResponse(200, res);
+};
+
+Posts.unreact = async (req, res) => {
+	const data = await mock(req);
+	await api.posts.unreact(req, data);
+	helpers.formatApiResponse(200, res);
+};
+
+Posts.getReactors = async (req, res) => {
+	const data = await api.posts.getReactors(req, { pid: req.params.pid });
+	helpers.formatApiResponse(200, res, data);
+};
+
+
+Posts.vote = async (req, res) => {
+	const data = await mock(req);
+	if (req.body.delta > 0) {
+		await api.posts.upvote(req, data);
+	} else if (req.body.delta < 0) {
+		await api.posts.downvote(req, data);
+	} else {
+		await api.posts.unvote(req, data);
+	}
+
+	helpers.formatApiResponse(200, res);
+};
+
+Posts.unvote = async (req, res) => {
+	const data = await mock(req);
+	await api.posts.unvote(req, data);
+	helpers.formatApiResponse(200, res);
+};
+
+Posts.getVoters = async (req, res) => {
+	const data = await api.posts.getVoters(req, { pid: req.params.pid });
+	helpers.formatApiResponse(200, res, data);
+};
+
+Posts.getUpvoters = async (req, res) => {
+	const data = await api.posts.getUpvoters(req, { pid: req.params.pid });
+	helpers.formatApiResponse(200, res, data);
+};
+
+
 Posts.vote = async (req, res) => {
 	const data = await mock(req);
 	if (req.body.delta > 0) {

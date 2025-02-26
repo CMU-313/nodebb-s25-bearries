@@ -25,6 +25,10 @@ define('components', function () {
 		'post/anchor': function (index) {
 			return $('[component="post"][data-index="' + index + '"] [component="post/anchor"]');
 		},
+		// YUKICHANGE: reaction-count component/function definition
+		'post/reaction-count' : function (pid){
+			return $('[component="post"][data-pid="' + pid + '"] [component="post/reaction-count"]')
+		},
 		'post/vote-count': function (pid) {
 			return $('[component="post"][data-pid="' + pid + '"] [component="post/vote-count"]');
 		},

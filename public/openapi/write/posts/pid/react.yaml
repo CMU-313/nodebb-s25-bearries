@@ -20,11 +20,11 @@ put:
           properties:
             delta:
               type: number
-              description: Positive integer for reacts (0 to unvote.)
+              description: Positive integer for react, 0 to unreact.
               example: 1
   responses:
     '200':
-      description: Post successfully reacted
+      description: Post successfully upvoted
       content:
         application/json:
           schema:
@@ -37,9 +37,9 @@ put:
                 properties: {}
 delete:
   tags:
-    - reactions
+    - posts
   summary: unreact a post
-  description: This operation removes a reaction on a post.
+  description: This operation removes a pre-cast react on a post.
   parameters:
     - in: path
       name: pid
