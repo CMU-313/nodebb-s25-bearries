@@ -85,7 +85,7 @@ module.exports = function (Posts) {
 		return { reacted: hasReacted[0]};
 	};
 
-	Posts.getReactStatusByPostIDs = async function (pids, uid) {
+	Posts.getReactionStatusByPostIDs = async function (pids, uid) {
 		if (parseInt(uid, 10) <= 0) {
 			const data = pids.map(() => false);
 			// YUKICHECK: forgot which var i changed the upvotes to... reacts or reactions?? return { upvotes: data, downvotes: data };
