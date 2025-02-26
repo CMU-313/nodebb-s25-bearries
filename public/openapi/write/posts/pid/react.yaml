@@ -1,0 +1,63 @@
+put:
+  tags:
+    - reactions
+  summary: react on a post
+  description: This operation reacts to a post.
+  parameters:
+    - in: path
+      name: pid
+      schema:
+        type: string
+      required: true
+      description: a valid post id
+      example: 2
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            delta:
+              type: number
+              description: Positive integer for reacts (0 to unvote.)
+              example: 1
+  responses:
+    '200':
+      description: Post successfully reacted
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                $ref: ../../../components/schemas/Status.yaml#/Status
+              response:
+                type: object
+                properties: {}
+delete:
+  tags:
+    - reactions
+  summary: unreact a post
+  description: This operation removes a reaction on a post.
+  parameters:
+    - in: path
+      name: pid
+      schema:
+        type: string
+      required: true
+      description: a valid post id
+      example: 2
+  responses:
+    '200':
+      description: Post successfully unreacted
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                $ref: ../../../components/schemas/Status.yaml#/Status
+              response:
+                type: object
+                properties: {}
