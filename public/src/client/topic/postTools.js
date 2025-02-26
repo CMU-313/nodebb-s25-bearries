@@ -125,6 +125,12 @@ define('forum/topic/postTools', [
 			});
 		});
 
+		// YUKICHANGE: adding on click action for post/react
+		postContainer.on('click', '[component="post/react"]', function () {
+			console.log("reaction button clicked (file public/src/client/topic/postTools.js)");
+			return reactions.toggleReaction($(this), '.reacted', 1);
+		});
+
 		postContainer.on('click', '[component="post/bookmark"]', function () {
 			return bookmarkPost($(this), getData($(this), 'data-pid'));
 		});
