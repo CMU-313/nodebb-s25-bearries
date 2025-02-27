@@ -32,7 +32,6 @@ module.exports = function (app, middleware, controllers) {
 		middleware.uploads.ratelimit,
 		middleware.applyCSRF,
 	];
-
 	router.post('/post/upload', postMiddlewares, helpers.tryRoute(uploadsController.uploadPost));
 	router.post('/user/:userslug/uploadpicture', [
 		...middlewares,
@@ -42,4 +41,31 @@ module.exports = function (app, middleware, controllers) {
 		middleware.canViewUsers,
 		middleware.checkAccountPermissions,
 	], helpers.tryRoute(controllers.accounts.edit.uploadPicture));
+	const postsAPI = require('../api/posts');
+
+	router.get('/post/:pid/reactions', async (req, res) => {
+		try {
+			const reactions = await postsAPI.getReactions(req.user, req.params);
+			res.json(reactions);
+		} catch (err) {
+			res.status(500).json({ error: err.message });
+		}
+	});
+	
+	router.post('/post/:pid/reactions', async (req, res) => {
+		try {
+			const reactions = await postsAPI.addReaction(req.user, req.body);
+			res.json(reactions);
+		} catch (err) {
+			res.status(500).json({ error: err.message });
+		}
+	});
+	router.delete('/post/:pid/reactions', async (req, res) => {
+		try {
+			const reactions = await postsAPI.removeReaction(req.user, req.body);
+			res.json(reactions);
+		} catch (err) {
+			res.status(500).json({ error: err.message });
+		}
+	});
 };
