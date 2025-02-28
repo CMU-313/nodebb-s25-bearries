@@ -103,7 +103,7 @@ define('forum/topic/events', [
 	}
 
 	function onTopicResolved(data) {
-		if (data.topic && data.topic.tags){
+		if (data.topic && data.topic.tags) {
 			require(['forum/topic/tag'], function (tag) {
 				tag.updateTopicTags([data.topic]);
 			});

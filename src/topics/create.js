@@ -14,6 +14,7 @@ const posts = require('../posts');
 const privileges = require('../privileges');
 const categories = require('../categories');
 const translator = require('../translator');
+const websockets = require('../socket.io');
 
 module.exports = function (Topics) {
 	Topics.create = async function (data) {
@@ -252,7 +253,7 @@ module.exports = function (Topics) {
 		// Refresh tags
 		tags = await Topics.getTopicTagsObjects(tid);
 		data.tags = tags;
-		websockets.in(`topic_${tid}`).emit('event:topic_resolved', {topic: data});
+		websockets.in(`topic_${tid}`).emit('event:topic_resolved', { topic: data });
 	}
 
 	async function onNewPost(postData, data) {
