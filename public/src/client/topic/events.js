@@ -86,7 +86,7 @@ define('forum/topic/events', [
 			return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10);
 		}).toggleClass('reacted', data.react);
 		// post.find('[component="post/unreact"]').filter(function (index, el) {
-		// 	return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10);
+		// return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10);
 		// }).toggleClass('downvoted', data.downvote);
 	}
 
@@ -98,7 +98,7 @@ define('forum/topic/events', [
 	function updatePostReactions(data) {
 		const reactions = $('[data-pid="' + data.post.pid + '"] [component="post/reaction-count"]').filter(function (index, el) {
 			return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10);
-			reactions.html(data.post.reactions).attr('data-reactions', data.post.reactions);
+			// reactions.html(data.post.reactions).attr('data-reactions', data.post.reactions);
 		});
 	}
 

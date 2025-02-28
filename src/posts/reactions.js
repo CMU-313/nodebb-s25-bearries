@@ -101,9 +101,9 @@ module.exports = function (Posts) {
 	Posts.getReactedUidsByPids = async function (pids) {
 		return await db.getSetsMembers(pids.map(pid => `pid:${pid}:react`));
 	};
-
+	///LYNN EDIT
 	function reactInProgress(pid, uid) {
-		return Array.isArray(reactInProgress[uid]) && reactInProgress[uid].includes(parseInt(pid, 10));
+		return Array.isArray(reactionsInProgress[uid]) && reactionsInProgress[uid].includes(parseInt(pid, 10));
 	}
 
 	function putReactInProgress(pid, uid) {
@@ -212,19 +212,32 @@ module.exports = function (Posts) {
 		};
 	}
 
+	// async function fireReactHook(postData, uid, type, unreact, reactStatus) {
+	// 	let hook = type;
+	// 	// YUKICHECK: This lowkey doens't make sense... do we want the 'unreact' here?? 
+    //     // let current = reactStatus.reacted ? 'upvote' : 'downvote';
+    //     let current = reactStatus.reacted ? 'unreact' : 'react';
+	// 	if (unreact) { // e.g. unreacting, removing a react
+	// 		hook = 'unreact';
+	// 	} else { // e.g. User *has not* reacted, clicks react
+	// 		current = 'unreact';
+	// 	}
+	// 	// action:post.upvote
+	// 	// action:post.downvote
+	// 	// action:post.unvote
+	// 	plugins.hooks.fire(`action:post.${hook}`, {
+	// 		pid: postData.pid,
+	// 		uid: uid,
+	// 		owner: postData.uid,
+	// 		current: current,
+	// 	});
+	// }
+
+	///LYNN EDIT i think this might be right??
 	async function fireReactHook(postData, uid, type, unreact, reactStatus) {
-		let hook = type;
-		// YUKICHECK: This lowkey doens't make sense... do we want the 'unreact' here?? 
-        // let current = reactStatus.reacted ? 'upvote' : 'downvote';
-        let current = reactStatus.reacted ? 'unreact' : 'react';
-		if (unreact) { // e.g. unreacting, removing a react
-			hook = 'unreact';
-		} else { // e.g. User *has not* reacted, clicks react
-			current = 'unreact';
-		}
-		// action:post.upvote
-		// action:post.downvote
-		// action:post.unvote
+		let hook = unreact ? 'unreact' : 'react';
+		let current = unreact ? 'react' : 'unreact'; // If unreacting, previous state was 'react'
+	
 		plugins.hooks.fire(`action:post.${hook}`, {
 			pid: postData.pid,
 			uid: uid,
@@ -232,9 +245,10 @@ module.exports = function (Posts) {
 			current: current,
 		});
 	}
+	
 
 	async function adjustPostReactions(postData, uid, type, unreact) {
-		const notType = (type === 'unreact' ? 'react' : 'react');
+		const notType = (type === 'unreact' ? 'react' : 'unreact');
 		if (unreact) {
 			await db.setRemove(`pid:${postData.pid}:${type}`, uid);
 		} else {
