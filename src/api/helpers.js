@@ -140,6 +140,12 @@ async function executeCommand(caller, command, eventName, notification, data) {
 		socketHelpers.sendNotificationToPostOwner(data.pid, caller.uid, command, notification);
 	} else if (result && command === 'unvote') {
 		socketHelpers.rescindUpvoteNotification(data.pid, caller.uid);
+	} else if (result && command === 'react') {
+		socketHelpers.react(result, notification);
+	} else if (result && command === 'unreact') {
+		socketHelpers.unreact(result, notification);
 	}
+	/// LYNN CHANGE added sockethelpers.react and unreact
+
 	return result;
 }

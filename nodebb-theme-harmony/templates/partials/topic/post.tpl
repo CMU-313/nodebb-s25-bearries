@@ -94,6 +94,20 @@
 
 	<div component="post/actions" class="d-flex justify-content-end gap-1 post-tools">
 		<!-- IMPORT partials/topic/reactions.tpl -->
+
+
+
+		<div class="d-flex reactions align-items-center">
+			<a component="post/reactions" href="#" class="btn-ghost-sm" title="[[topic:reactions]]">
+				<i class="fa fa-fw fa-smile text-primary"></i>
+			</a>
+
+			<meta itemprop="reactionCount" content="{posts.reactions}">
+			<a href="#" class="px-2 mx-1 btn-ghost-sm" component="post/reaction-count" data-reactions="{posts.reactions}" title="[[global:reactors]]">{posts.reactions}</a>
+		</div>
+
+
+
 		<a component="post/reply" href="#" class="btn-ghost-sm {{{ if !privileges.topics:reply }}}hidden{{{ end }}}" title="[[topic:reply]]"><i class="fa fa-fw fa-reply text-primary"></i></a>
 		<a component="post/quote" href="#" class="btn-ghost-sm {{{ if !privileges.topics:reply }}}hidden{{{ end }}}" title="[[topic:quote]]"><i class="fa fa-fw fa-quote-right text-primary"></i></a>
 

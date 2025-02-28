@@ -1,0 +1,199 @@
+@import "./sidebar";
+@import "./chats.scss";
+@import "./nprogress.scss";
+
+html {
+	overflow-y: scroll;
+	height: 100%;
+}
+body.skin-noskin {
+	background-color: $gray-100;
+}
+.caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}
+
+#content, .footer {
+	transition: opacity 150ms linear;
+	&.ajaxifying {
+		-moz-opacity: 0;
+		opacity: 0;
+	}
+}
+
+.tag-item {
+	background-color: $gray-200!important;
+	color: $gray-700!important;
+}
+
+// fix for quartz skin, backdrop-filter breaks layout and
+// post tools dropdowns go behind the card of the next post
+// https://github.com/thomaspark/bootswatch/issues/1199
+.skin-quartz {
+	[component="post"] .card {
+		backdrop-filter: none!important;
+	}
+
+	.tool-modal .dropdown-menu, .composer .dropdown-menu {
+		backdrop-filter: none!important;
+		background-color: $body-bg;
+		color: $body-color;
+	}
+}
+
+// topic & post selection outline
+.topic-list li.selected .card,
+.posts li.selected .card {
+	outline: 2px solid $success;
+}
+.topic-list-header {
+	position: static;
+}
+
+// unread bar on topic list
+.topic-list {
+	.category-item {
+		.unread-bar { width: 3px; right: 0px; }
+		&.unread .unread-bar {
+			background-color: $info;
+		}
+	}
+}
+
+// deleted posts in topic
+.topic .posts {
+	> li.deleted {
+		.content {
+			opacity: 0.3;
+		}
+		.votes {
+			display:none;
+		}
+	}
+	.highlight .card {
+		transition: 0.75s ease-in-out border-color;
+		border-color: $info;
+	}
+	.necro-post {
+		text-transform: none;
+	}
+}
+
+// topic sidebar sticky-top, change based on viewport
+@include media-breakpoint-down(lg) {
+	#topic-sidebar {
+		top: 6.0rem;
+	}
+}
+@include media-breakpoint-up(md) {
+	#topic-sidebar { top: 1.5rem; }
+}
+
+// block quote :dull
+blockquote {
+	border-left: 5px solid $body-color;
+	margin-left: $spacer;
+	padding-left: $spacer;
+}
+.post-content {
+	> blockquote {
+		> blockquote {
+			> *:not(.blockquote) {
+				display: none;
+			}
+		}
+
+		> blockquote.uncollapsed {
+			> *:not(.blockquote) {
+				display: block;
+			}
+		}
+	}
+}
+
+// only show breadcrumbs on category page
+.breadcrumb {
+	display: none;
+}
+.page-category .breadcrumb {
+	display: flex;
+}
+
+// no taskbar
+.taskbar { display: none }
+
+
+// like button toggle
+.post-footer [component="post/upvote"] {
+	.fa-heart-o { display: inline-block; }
+	.fa-heart { display: none; }
+	&.upvoted {
+		.fa-heart-o { display: none; }
+		.fa-heart { display: inline-block; color: $red; }
+	}
+}
+
+.pagination-block {
+	display: block;
+	transition: opacity 250ms ease-in;
+	opacity: 0;
+	&.ready {
+		opacity: 1;
+	}
+	&.noreplies {
+		pointer-events: none;
+		cursor: none;
+	}
+
+	.scroller-container {
+		height: 300px;
+		border-left: 3px solid $border-color;
+		left: 10px;
+		cursor: pointer;
+		.scroller-thumb {
+			position: relative;
+			left: -6px;
+			padding-right: 0px;
+			margin-right: -15px;
+			&:not(.active) {
+				transition: top 100ms linear;
+			}
+			cursor: grab;
+			&.active {
+				cursor: grabbing;
+			}
+		}
+	}
+}
+
+.account .categories {
+	[component="categories/category"] {
+		.depth-1 {
+			padding-left: 50px;
+		}
+		.depth-2 {
+			padding-left: 100px;
+		}
+		.depth-3 {
+			padding-left: 150px;
+		}
+		.depth-4 {
+			padding-left: 150px;
+		}
+	}
+}
+
+.composer {
+	z-index: 1020!important;
+	border-left: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+	border-right: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+	.resizer {
+		background: none!important;
+	}
+}

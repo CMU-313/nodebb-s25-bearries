@@ -71,6 +71,23 @@ body.template-topic {
 					}
 				}
 			}
+
+			[component="post/reactions"] {
+				&.reacted {
+					background-color: var(--btn-ghost-active-color);
+				}
+				&:hover {
+					background-color: blue;
+				}
+			}
+
+			[component="post/reaction-count"] {
+				background-color: var(--btn-ghost-active-color);
+
+				&:hover {
+					background-color: red;
+				}
+			}
 		}
 	}
 

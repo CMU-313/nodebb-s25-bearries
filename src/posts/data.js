@@ -61,6 +61,13 @@ function modifyPost(post, fields) {
 		if (post.hasOwnProperty('upvotes') && post.hasOwnProperty('downvotes')) {
 			post.votes = post.upvotes - post.downvotes;
 		}
+
+		// YUKICHANGE: updating field of reactors when modifying post
+		db.parseIntFields(post, intFields, fields);
+		if (post.hasOwnProperty('reacts')) {
+			post.reactors = post.reactions;
+		}
+
 		if (post.hasOwnProperty('timestamp')) {
 			post.timestampISO = utils.toISOString(post.timestamp);
 		}

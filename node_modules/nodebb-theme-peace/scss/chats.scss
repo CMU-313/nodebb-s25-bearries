@@ -1,0 +1,41 @@
+// chats need a bit of css
+
+body.page-user-chats {
+	> #panel {
+		height: 100%;
+		> div {
+			height: 100%;
+			> div {
+				height: 100%;
+				> .container {
+					height: 100%;
+
+				}
+			}
+		}
+	}
+
+	#panel {
+		max-width: 100%;
+		#content {
+			max-width: 100%;
+		}
+	}
+	#content {
+		.chats-full {
+			padding-top: 0!important;
+		}
+	}
+}
+
+@include media-breakpoint-down(md) {
+	.page-user-chats #content {
+		padding-top: 0!important;
+	}
+}
+
+.page-user-chats.chat-loaded {
+	.navbar {
+		display: none!important;
+	}
+}

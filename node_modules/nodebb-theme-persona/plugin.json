@@ -1,0 +1,21 @@
+{
+	"id": "nodebb-theme-persona",
+	"hooks": [
+		{ "hook": "filter:widgets.getAreas", "method": "defineWidgetAreas" },
+		{ "hook": "filter:config.get", "method": "getThemeConfig" },
+		{ "hook": "static:app.load", "method": "init" },
+		{ "hook": "filter:admin.header.build", "method": "addAdminNavigation" },
+		{ "hook": "filter:user.profileMenu", "method": "addProfileItem" }
+	],
+	"scripts": [
+		"public/modules/autohidingnavbar.js",
+		"public/persona.js"
+	],
+	"modules": {
+		"../admin/plugins/persona.js": "public/admin.js",
+		"persona/taskbar.js": "public/modules/taskbar.js",
+		"persona/mobile-menu.js": "public/modules/mobile-menu.js",
+		"../client/account/theme.js": "public/settings.js"
+	},
+	"languages": "languages"
+}

@@ -1,0 +1,5 @@
+{
+	"mentions": "メンション",
+	"user-mentioned-you-in": "<strong>%1</strong> mentioned you in <strong>%2</strong>",
+	"user-mentioned-group-in": "<strong>%1</strong> mentioned <strong>%2</strong> in <strong>%3</strong>"
+}

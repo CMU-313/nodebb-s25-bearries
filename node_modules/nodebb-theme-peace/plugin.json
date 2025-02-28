@@ -1,0 +1,16 @@
+{
+	"id": "nodebb-theme-peace",
+	"hooks": [
+		{ "hook": "static:app.load", "method": "init" },
+		{ "hook": "filter:widgets.getAreas", "method": "defineWidgetAreas" },
+		{ "hook": "filter:config.get", "method": "filterConfigGet" },
+		{ "hook": "filter:middleware.renderHeader", "method": "filterMiddlewareRenderHeader" },
+		{ "hook": "filter:admin.header.build", "method": "addAdminNavigation" }
+	],
+	"scripts": [
+		"public/peace.js"
+	],
+	"modules": {
+		"../admin/plugins/peace.js": "public/admin.js"
+	}
+}
