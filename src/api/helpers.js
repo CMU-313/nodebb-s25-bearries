@@ -145,7 +145,7 @@ async function executeCommand(caller, command, eventName, notification, data) {
 	} else if (result && command === 'unreact') {
 		socketHelpers.unreact(result, notification);
 	}
-	///LYNN CHANGE added sockethelpers.react and unreact
+	/// LYNN CHANGE added sockethelpers.react and unreact
 
 	return result;
 }

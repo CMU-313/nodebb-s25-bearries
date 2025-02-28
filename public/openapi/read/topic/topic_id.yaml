@@ -67,6 +67,8 @@ get:
                           type: number
                         deleted:
                           type: number
+                        reactions:
+                          type: number
                         upvotes:
                           type: number
                         downvotes:
@@ -346,6 +348,8 @@ get:
                       posts:history:
                         type: boolean
                       posts:upvote:
+                        type: boolean
+                      posts:reactions:
                         type: boolean
                       posts:downvote:
                         type: boolean

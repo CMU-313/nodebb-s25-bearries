@@ -13,25 +13,25 @@ const notifications = require('../notifications');
 const plugins = require('../plugins');
 const utils = require('../utils');
 const batch = require('../batch');
-const postsAPI = require('../api/posts'); //added for reactions
+const postsAPI = require('../api/posts'); // added for reactions
 
-//added for reactions
+// added for reactions
 const SocketHelpers = module.exports;
 
-//added for reactions, yuki is testing
+// added for reactions, yuki is testing
 SocketHelpers.registerSockets = function () {
-    if (!websockets.server) {
-        console.error('WebSocket server is not initialized yet.');
-        return;
-    }
+	if (!websockets.server) {
+		console.error('WebSocket server is not initialized yet.');
+		return;
+	}
 
-    websockets.server.on('connection', (socket) => {
-        console.log('New socket connection established:', socket.id);
+	websockets.server.on('connection', (socket) => {
+		console.log('New socket connection established:', socket.id);
 
-        socket.on('posts.toggleReaction', (data, callback) => {
-            postsAPI.toggleReaction(socket, data, callback);
-        });
-    });
+		socket.on('posts.toggleReaction', (data, callback) => {
+			postsAPI.toggleReaction(socket, data, callback);
+		});
+	});
 };
 
 SocketHelpers.notifyNew = async function (uid, type, result) {
@@ -243,11 +243,11 @@ SocketHelpers.removeSocketsFromRoomByUids = async function (uids, roomId) {
 };
 
 SocketHelpers.registerSockets = function () {
-    websockets.on('connection', (socket) => {
-        socket.on('posts.toggleReaction', (data, callback) => {
-            postsAPI.toggleReaction(socket, data, callback);
-        });
-    });
+	websockets.on('connection', (socket) => {
+		socket.on('posts.toggleReaction', (data, callback) => {
+			postsAPI.toggleReaction(socket, data, callback);
+		});
+	});
 };
 
 require('../promisify')(SocketHelpers);

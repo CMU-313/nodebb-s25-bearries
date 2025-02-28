@@ -296,36 +296,6 @@ postsAPI.move = async function (caller, data) {
 	}
 };
 
-
-async function canSeeVotes(uid, cids, type) {
-	const isArray = Array.isArray(cids);
-	if (!isArray) {
-		cids = [cids];
-	}
-	const uniqCids = _.uniq(cids);
-	const [canRead, isAdmin, isMod] = await Promise.all([
-		privileges.categories.isUserAllowedTo(
-			'topics:read', uniqCids, uid
-		),
-		privileges.users.isAdministrator(uid),
-		privileges.users.isModerator(uid, cids),
-	]);
-	const cidToAllowed = _.zipObject(uniqCids, canRead);
-	const checks = cids.map(
-		(cid, index) => isAdmin || isMod[index] ||
-		(
-			cidToAllowed[cid] &&
-			(
-				meta.config[type] === 'all' ||
-				(meta.config[type] === 'loggedin' && parseInt(uid, 10) > 0)
-			)
-		)
-	);
-	return isArray ? checks : checks[0];
-}
-
-
-
 postsAPI.upvote = async function (caller, data) {
 	return await apiHelpers.postCommand(caller, 'upvote', 'voted', 'notifications:upvoted-your-post-in', data);
 };
@@ -408,7 +378,7 @@ postsAPI.getUpvoters = async function (caller, data) {
 	};
 };
 
-//LYNN CHANGE
+// LYNN CHANGE
 postsAPI.react = async function (caller, data) {
 	return await apiHelpers.postCommand(caller, 'react', 'reacted', '', data);
 };
@@ -422,9 +392,9 @@ postsAPI.getUpvoters = async function (caller, data) {
 		throw new Error('[[error:invalid-data]]');
 	}
 	const { pid } = data;
-	const cid = await posts.getCidByPid(pid);
+	// const cid = await posts.getCidByPid(pid);
 	// if (!await canSeeVotes(caller.uid, cid, 'upvoteVisibility')) {
-	// 	throw new Error('[[error:no-privileges]]');
+	// throw new Error('[[error:no-privileges]]');
 	// }
 
 	let upvotedUids = (await posts.getUpvotedUidsByPids([pid]))[0];
@@ -449,7 +419,7 @@ postsAPI.getUpvoters = async function (caller, data) {
 		cutoff,
 	};
 };
-//LYNN CHANGE
+// LYNN CHANGE
 
 async function canSeeVotes(uid, cids, type) {
 	const isArray = Array.isArray(cids);

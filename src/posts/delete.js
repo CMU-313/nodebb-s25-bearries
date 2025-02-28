@@ -76,11 +76,12 @@ module.exports = function (Posts) {
 			deleteFromCategoryRecentPosts(postData),
 			deleteFromUsersBookmarks(pids),
 			deleteFromUsersVotes(pids),
+			deleteFromUsersReactions(pids),
 			deleteFromReplies(postData),
 			deleteFromGroups(pids),
 			deleteDiffs(pids),
 			deleteFromUploads(pids),
-			db.sortedSetsRemove(['posts:pid', 'posts:votes', 'posts:flagged'], pids),
+			db.sortedSetsRemove(['posts:pid', 'posts:votes', 'posts:reactions', 'posts:flagged'], pids),
 		]);
 
 		await resolveFlags(postData, uid);
@@ -173,8 +174,8 @@ module.exports = function (Posts) {
 		await db.deleteAll(pids.map(pid => `pid:${pid}:users_bookmarked`));
 	}
 
-	// YUKICHANGE: mimics deleteFromUserVotes below to try get updated list of reactors... don't know what this is doing actually
-	async function deleteFromUserReactions(pids) {
+	// YUKICHANGE: mimics deleteFromUserVotes below to try get updated list of reactors...
+	async function deleteFromUsersReactions(pids) {
 		const [reactors] = await Promise.all([
 			db.getSetsMembers(pids.map(pid => `pid:${pid}:react`)),
 		]);

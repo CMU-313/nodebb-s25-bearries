@@ -114,6 +114,7 @@ PostObject:
         - cid
         - title
         - slug
+        - reactions
     category:
       type: object
       properties:

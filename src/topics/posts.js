@@ -117,7 +117,7 @@ module.exports = function (Topics) {
 		const [
 			bookmarks,
 			voteData,
-			//YUKICHANGE: initializing reaction data
+			// YUKICHANGE: initializing reaction data
 			// reactionData,
 			userData,
 			editors,
@@ -125,7 +125,7 @@ module.exports = function (Topics) {
 		] = await Promise.all([
 			posts.hasBookmarked(pids, uid),
 			posts.getVoteStatusByPostIDs(pids, uid),
-			//YUKICHANGE: oh my lord --> hopefully fetches us the reactionData
+			// YUKICHANGE: oh my lord --> hopefully fetches us the reactionData
 			// posts.getReactionStatusByPostIDs(pids, uid),
 
 			getPostUserData('uid', async uids => await posts.getUserInfoForPosts(uids, uid)),
@@ -140,7 +140,7 @@ module.exports = function (Topics) {
 				postObj.editor = postObj.editor ? editors[postObj.editor] : null;
 				postObj.bookmarked = bookmarks[i];
 
-				//YUKICHANGE: added reaction data into postData
+				// YUKICHANGE: added reaction data into postData
 				// postObj.reacted = reactionData.reacted[i];
 				postObj.reactions = postObj.reactions || 0;
 

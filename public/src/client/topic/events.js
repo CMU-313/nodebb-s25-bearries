@@ -261,7 +261,7 @@ define('forum/topic/events', [
 			return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10);
 		}).toggleClass('reacted', data.react);
 		// post.find('[component="post/unreact"]').filter(function (index, el) {
-		// 	return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10);
+		// return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10);
 		// }).toggleClass('downvoted', data.downvote);
 	}
 

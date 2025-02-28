@@ -1,4 +1,5 @@
 // YUKICHANGE: added to mimic votes.js
+
 'use strict';
 
 define('forum/topic/reactions', [
@@ -9,22 +10,22 @@ define('forum/topic/reactions', [
 
 	Reactions.addReactionHandler = function () {
 		_showTooltip = {};
-        components.get('topic').on('mouseenter', '[data-pid] [component="post/reaction-count"]', loadDataAndCreateTooltip);
-        components.get('topic').on('mouseleave', '[data-pid] [component="post/reaction-count"]', destroyTooltip);
+		components.get('topic').on('mouseenter', '[data-pid] [component="post/reaction-count"]', loadDataAndCreateTooltip);
+		components.get('topic').on('mouseleave', '[data-pid] [component="post/reaction-count"]', destroyTooltip);
 	};
 
 	// function canSeeUpVotes() {
-	// 	const { upvoteVisibility, privileges } = ajaxify.data;
-	// 	return privileges.isAdminOrMod ||
-	// 		upvoteVisibility === 'all' ||
-	// 		(upvoteVisibility === 'loggedin' && config.loggedIn);
+	// const { upvoteVisibility, privileges } = ajaxify.data;
+	// return privileges.isAdminOrMod ||
+	// upvoteVisibility === 'all' ||
+	// (upvoteVisibility === 'loggedin' && config.loggedIn);
 	// }
 
 	// function canSeeVotes() {
-	// 	const { upvoteVisibility, downvoteVisibility, privileges } = ajaxify.data;
-	// 	return privileges.isAdminOrMod ||
-	// 		upvoteVisibility === 'all' || downvoteVisibility === 'all' ||
-	// 		((upvoteVisibility === 'loggedin' || downvoteVisibility === 'loggedin') && config.loggedIn);
+	// const { upvoteVisibility, downvoteVisibility, privileges } = ajaxify.data;
+	// return privileges.isAdminOrMod ||
+	// upvoteVisibility === 'all' || downvoteVisibility === 'all' ||
+	// ((upvoteVisibility === 'loggedin' || downvoteVisibility === 'loggedin') && config.loggedIn);
 	// }
 
 	function destroyTooltip() {

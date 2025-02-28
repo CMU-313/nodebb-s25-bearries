@@ -112,7 +112,7 @@ async function mock(req) {
 	return { pid: req.params.pid, room_id: `topic_${tid}` };
 }
 
-//YUKICHANGE: api triggers for react, unreact, getReactors
+// YUKICHANGE: api triggers for react, unreact, getReactors
 Posts.react = async (req, res) => {
 	const data = await mock(req);
 	if (req.body.delta > 0) {
