@@ -93,6 +93,28 @@
 	<div component="post/replies/container" class="my-2 col-11 border rounded-1 p-3 hidden-empty"></div>
 
 	<div component="post/actions" class="d-flex justify-content-end gap-1 post-tools">
+	
+	    <!-- Post Reactions -->
+<div component="post/reactions" class="d-flex align-items-center gap-2">
+    <!-- Display Existing Reactions -->
+    {{{ if posts.reactions.length }}}
+        <div class="d-flex gap-1">
+            {{{ each posts.reactions }}}
+            <button class="reaction-bubble btn btn-light btn-sm px-2"
+                data-reaction="{posts.reactions.reaction}"
+                component="post/reaction">
+                {posts.reactions.emoji} {posts.reactions.count}
+            </button>
+            {{{ end }}}
+        </div>
+    {{{ end }}}
+
+    <!-- Add Reaction Button -->
+    <button class="btn btn-sm btn-outline-primary px-2" component="post/add-reaction">
+        <i class="fa fa-smile-o"></i> Add Reaction
+    </button>
+</div>
+
 		<!-- IMPORT partials/topic/reactions.tpl -->
 		<a component="post/reply" href="#" class="btn-ghost-sm {{{ if !privileges.topics:reply }}}hidden{{{ end }}}" title="[[topic:reply]]"><i class="fa fa-fw fa-reply text-primary"></i></a>
 		<a component="post/quote" href="#" class="btn-ghost-sm {{{ if !privileges.topics:reply }}}hidden{{{ end }}}" title="[[topic:quote]]"><i class="fa fa-fw fa-quote-right text-primary"></i></a>

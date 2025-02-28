@@ -59,7 +59,22 @@ async function notifyUids(uid, uids, type, result) {
 			uidFrom: uid,
 			post: postToUid,
 		});
-
+        websockets.on('reaction:add', async function (socket, data) {
+			try {
+				const reactions = await postsAPI.addReaction(socket.user, data);
+				websockets.in(`topic_${data.pid}`).emit('event:reaction_updated', { pid: data.pid, reactions });
+			} catch (err) {
+				socket.emit('error', err.message);
+			}
+		});
+		websockets.on('reaction:remove', async function (socket, data) {
+			try {
+				const reactions = await postsAPI.removeReaction(socket.user, data);
+				websockets.in(`topic_${data.pid}`).emit('event:reaction_updated', { pid: data.pid, reactions });
+			} catch (err) {
+				socket.emit('error', err.message);
+			}
+		});
 		websockets.in(`uid_${toUid}`).emit('event:new_post', copyResult);
 		if (copyResult.topic && type === 'newTopic') {
 			await plugins.hooks.fire('filter:sockets.sendNewTopicToUid', {

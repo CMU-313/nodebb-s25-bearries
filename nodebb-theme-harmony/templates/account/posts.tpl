@@ -32,4 +32,9 @@
 	{{{ end }}}
 </div>
 
+<a component="post/reactions" href="#" class="btn-ghost-sm" title="[[topic:reactions]]">
+    <i class="fa fa-fw fa-thumbs-up text-primary"></i> Reactions
+</a>
+
+
 <!-- IMPORT partials/account/footer.tpl -->
