@@ -29,6 +29,8 @@ describe("Topic's", () => {
 	let topic;
 	let categoryObj;
 	let adminUid;
+	let instructorUid;
+	let studentUid;
 	let adminJar;
 	let csrf_token;
 	let fooUid;
@@ -40,6 +42,11 @@ describe("Topic's", () => {
 		const adminLogin = await helpers.loginUser("admin", "123456");
 		adminJar = adminLogin.jar;
 		csrf_token = adminLogin.csrf_token;
+
+		instructorUid = await User.create({ username: 'prof' });
+		await groups.join('Instructors', instructorUid);
+		studentUid = await User.create({ username: 'student' });
+		await groups.join('Students', studentUid);
 
 		categoryObj = await categories.create({
 			name: "Test Category",
@@ -2400,7 +2407,15 @@ describe("Topic's", () => {
 			assert.deepStrictEqual(categoryTags.sort(), ["tag2", "tag4", "tag6"]);
 		});
 
-		it("should respect minTags", async () => {
+		it('should resolve topic', async () => {
+			const t = await topics.post({ uid: studentUid, tags: [], title: 'topic title 1', content: 'topic 1 content', cid: topic.categoryId });
+			const { tid } = t.topicData;
+			await topics.reply({ uid: instructorUid, content: 'reply 1 content', tid: tid });
+			const tags = await topics.getTopicTags(tid);
+			assert.deepStrictEqual(tags.sort(), ['resolved']);
+		});
+
+		it('should respect minTags', async () => {
 			const oldValue = meta.config.minimumTagsPerTopic;
 			meta.config.minimumTagsPerTopic = 2;
 			let err;

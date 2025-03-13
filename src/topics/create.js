@@ -1,18 +1,19 @@
-"use strict";
+'use strict';
 
-const _ = require("lodash");
+const _ = require('lodash');
 
-const db = require("../database");
-const utils = require("../utils");
-const slugify = require("../slugify");
-const plugins = require("../plugins");
-const analytics = require("../analytics");
-const user = require("../user");
-const meta = require("../meta");
-const posts = require("../posts");
-const privileges = require("../privileges");
-const categories = require("../categories");
-const translator = require("../translator");
+const db = require('../database');
+const utils = require('../utils');
+const slugify = require('../slugify');
+const plugins = require('../plugins');
+const analytics = require('../analytics');
+const user = require('../user');
+const meta = require('../meta');
+const posts = require('../posts');
+const privileges = require('../privileges');
+const categories = require('../categories');
+const translator = require('../translator');
+const websockets = require('../socket.io');
 
 module.exports = function (Topics) {
 	Topics.create = async function (data) {
@@ -207,9 +208,10 @@ module.exports = function (Topics) {
 		const { tid } = data;
 		const { uid } = data;
 
-		const [topicData, isAdmin] = await Promise.all([
+		const [topicData, isAdmin, isInstructor] = await Promise.all([
 			Topics.getTopicData(tid),
 			privileges.users.isAdministrator(uid),
+			privileges.users.isInstructor(uid),
 		]);
 
 		await canReply(data, topicData);
@@ -232,6 +234,10 @@ module.exports = function (Topics) {
 		// For replies to scheduled topics, don't have a timestamp older than topic's itself
 		if (topicData.scheduled) {
 			data.timestamp = topicData.lastposttime + 1;
+		}
+
+		if (isInstructor) {
+			await resolveTopic(topicData, topicData.tags);
 		}
 
 		data.ip = data.req ? data.req.ip : null;
@@ -270,6 +276,23 @@ module.exports = function (Topics) {
 
 		return postData;
 	};
+
+	async function resolveTopic(data, tags) {
+		const { tid } = data;
+		// Remove unresolved tag and add resolved tag
+		const topicTags = tags.map(tagItem => tagItem.value);
+		if (!topicTags.includes('unresolved')) {
+			return;
+		}
+		topicTags.splice(topicTags.indexOf('unresolved'), 1);
+		topicTags.push('resolved');
+		await Topics.updateTopicTags([tid], topicTags);
+
+		// Refresh tags
+		tags = await Topics.getTopicTagsObjects(tid);
+		data.tags = tags;
+		websockets.in(`topic_${tid}`).emit('event:topic_resolved', { topic: data });
+	}
 
 	async function onNewPost(postData, data) {
 		const { tid, uid } = postData;

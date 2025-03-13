@@ -38,8 +38,10 @@ define("forum/topic/events", [
 
 		"event:topic_moved": onTopicMoved,
 
-		"event:post_edited": onPostEdited,
-		"event:post_purged": onPostPurged,
+		'event:topic_resolved': onTopicResolved,
+
+		'event:post_edited': onPostEdited,
+		'event:post_purged': onPostPurged,
 
 		"event:post_deleted": togglePostDeleteState,
 		"event:post_restored": togglePostDeleteState,
@@ -129,12 +131,17 @@ define("forum/topic/events", [
 		}
 	}
 
+	function onTopicResolved(data) {
+		if (data.topic && data.topic.tags) {
+			require(['forum/topic/tag'], function (tag) {
+				tag.updateTopicTags([data.topic]);
+			});
+		}
+	}
+
 	function onPostEdited(data) {
-		if (
-			!data ||
-			!data.post ||
-			parseInt(data.post.tid, 10) !== parseInt(ajaxify.data.tid, 10)
-		) {
+		console.trace();
+		if (!data || !data.post || parseInt(data.post.tid, 10) !== parseInt(ajaxify.data.tid, 10)) {
 			return;
 		}
 		const editedPostEl = components
