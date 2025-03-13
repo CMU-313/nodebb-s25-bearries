@@ -36,6 +36,11 @@ define('forum/topic/posts', [
 
 		Posts.modifyPostsByPrivileges(data.posts);
 
+		// Ensure reactions data is processed when a new post appears
+		data.posts.forEach((post) => {
+			post.reactions = post.reactions || [];
+		});
+
 		updatePostCounts(data.posts);
 		updateNavigatorLastPostTimestamp(data.posts[0]);
 		updatePostIndices(data.posts);
@@ -293,6 +298,11 @@ define('forum/topic/posts', [
 		Posts.addBlockquoteEllipses(posts);
 		hidePostToolsForDeletedPosts(posts);
 		await addNecroPostMessage();
+
+		// Attach reaction event listeners
+		posts.find('[component="post/reactions"]').each(function () {
+			attachReactionEvents($(this));
+		});
 	};
 
 	Posts.addTopicEvents = async function (events) {
@@ -448,3 +458,32 @@ define('forum/topic/posts', [
 
 	return Posts;
 });
+function attachReactionEvents($reactionContainer) {
+	$reactionContainer.find('[component="post/reaction"]').off('click').on('click', async function () {
+		const $this = $(this);
+		const reaction = $this.attr('data-reaction');
+		const pid = $this.closest('[component="post"]').attr('data-pid');
+
+		try {
+			const response = await fetch(`${config.relative_path}/api/post/${pid}/reaction`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'x-csrf-token': config.csrf_token,
+				},
+				body: JSON.stringify({ reaction }),
+			});
+
+			if (!response.ok) throw new Error('Failed to react');
+
+			const result = await response.json();
+			if (result.success) {
+				// Update UI with new reaction count
+				const countElement = $this.find('.reaction-count');
+				countElement.text(parseInt(countElement.text(), 10) + 1);
+			}
+		} catch (error) {
+			console.error('Reaction failed:', error);
+		}
+	});
+}
