@@ -1,0 +1,14 @@
+  {
+    "compilerOptions": {
+      "allowJs": true,
+      "checkJs": false,        // Turn off type checking for JS files initially
+      "outDir": "./dist",
+      "target": "ES2020",
+      "module": "CommonJS",
+      "noImplicitAny": false,  // Don't require explicit types
+      "skipLibCheck": true,    // Skip type checking of declaration files
+      "ignoreDeprecations": "5.0"
+    },
+    "include": ["**/*.js"],
+    "exclude": ["node_modules", "dist"]
+  }

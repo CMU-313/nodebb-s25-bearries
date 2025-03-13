@@ -14,7 +14,8 @@
         "lint": "eslint --cache ./nodebb .",
         "test": "nyc --reporter=html --reporter=text-summary mocha",
         "coverage": "nyc report --reporter=text-lcov > ./coverage/lcov.info",
-        "coveralls": "nyc report --reporter=text-lcov | coveralls && rm -r coverage"
+        "coveralls": "nyc report --reporter=text-lcov | coveralls && rm -r coverage",
+        "fuzz": "fast-fuzz --input ./build/public/src"
     },
     "nyc": {
         "exclude": [
@@ -172,6 +173,7 @@
         "mockdate": "3.0.5",
         "nyc": "15.1.0",
         "smtp-server": "3.13.4",
+        "typescript": "^5.8.2",
         "reflect-metadata":"^0.2.2"
     },
     "optionalDependencies": {
@@ -198,4 +200,4 @@
             "url": "https://github.com/barisusakli"
         }
     ]
-}
+  }
