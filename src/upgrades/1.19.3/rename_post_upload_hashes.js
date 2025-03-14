@@ -41,7 +41,7 @@ module.exports = {
 				const hashes = uploads.map(upload => md5(upload.value));
 				const newHashes = uploads.map(upload => md5(`files/${upload.value}`));
 
-				// cant use db.rename since `fix_user_uploads_zset.js` upgrade script already creates
+				// can't use db.rename since `fix_user_uploads_zset.js` upgrade script already creates
 				// `upload:md5(upload.value) hash, trying to rename to existing key results in dupe error
 				const oldData = await db.getObjects(hashes.map(hash => `upload:${hash}`));
 				const bulkSet = [];

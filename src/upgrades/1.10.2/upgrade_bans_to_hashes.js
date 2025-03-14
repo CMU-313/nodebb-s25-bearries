@@ -20,7 +20,7 @@ module.exports = {
 					db.getObjectFields(`user:${uid}`, ['banned', 'banned:expire', 'joindate', 'lastposttime', 'lastonline']),
 				]);
 
-				// has no history, but is banned, create plain object with just uid and timestmap
+				// has no history, but is banned, create plain object with just uid and timestamp
 				if (!bans.length && parseInt(userData.banned, 10)) {
 					const banTimestamp = (
 						userData.lastonline ||

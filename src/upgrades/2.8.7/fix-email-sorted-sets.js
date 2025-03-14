@@ -25,7 +25,7 @@ module.exports = {
 					return;
 				}
 
-				// user has email but doesn't match whats stored in user hash, gh#11259
+				// user has email but doesn't match what's stored in user hash, gh#11259
 				if (userData.email && userData.email.toLowerCase() !== email.toLowerCase()) {
 					bulkRemove.push(['email:uid', email]);
 					bulkRemove.push(['email:sorted', `${email.toLowerCase()}:${uid}`]);
