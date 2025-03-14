@@ -1,3 +1,4 @@
+//@flow
 'use strict';
 
 const _ = require('lodash');
@@ -15,14 +16,26 @@ const categories = require('../categories');
 const translator = require('../translator');
 const websockets = require('../socket.io');
 
-module.exports = function (Topics) {
+module.exports = function (Topics: Object) {
 	Topics.create = async function (data) {
 		// This is an internal method, consider using Topics.post instead
 		const timestamp = data.timestamp || Date.now();
 
 		const tid = await db.incrObjectField('global', 'nextTid');
 
-		let topicData = {
+		let topicData: {
+			tid: number,
+			uid: number,
+			cid: number,
+			mainPid: number,
+			title: string,
+			slug: string,
+			timestamp: number,
+			lastposttime: number,
+			postcount: number,
+			viewcount: number,
+			tags?: string
+		} = {
 			tid: tid,
 			uid: data.uid,
 			cid: data.cid,
@@ -238,7 +251,14 @@ module.exports = function (Topics) {
 		return postData;
 	};
 
-	async function resolveTopic(data, tags) {
+	async function resolveTopic(
+		data: {
+			tid: number,
+			tags?: Array<Object>,
+			[key: string]: any
+		}, 
+		tags: Array<{value: string, [key: string]: any}>
+	) {
 		const { tid } = data;
 		// Remove unresolved tag and add resolved tag
 		const topicTags = tags.map(tagItem => tagItem.value);
@@ -255,7 +275,20 @@ module.exports = function (Topics) {
 		websockets.in(`topic_${tid}`).emit('event:topic_resolved', { topic: data });
 	}
 
-	async function onNewPost(postData, data) {
+	async function onNewPost(
+		postData: {
+			tid: number,
+			uid: number,
+			pid: number,
+			content?: string,
+			timestamp?: number,
+			[key: string]: any
+		}, 
+		data: {
+			handle?: string,
+			[key: string]: any
+		}
+	) {
 		const { tid, uid } = postData;
 		await Topics.markAsRead([tid], uid);
 		const [
@@ -296,7 +329,13 @@ module.exports = function (Topics) {
 		check(content, meta.config.minimumPostLength, meta.config.maximumPostLength, 'content-too-short', 'content-too-long');
 	};
 
-	function check(item, min, max, minError, maxError) {
+	function check(
+		item: ?string | any,
+		min: number | string,
+		max: number | string,
+		minError: string,
+		maxError: string
+	){
 		// Trim and remove HTML (latter for composers that send in HTML, like redactor)
 		if (typeof item === 'string') {
 			item = utils.stripHTMLTags(item).trim();
@@ -309,7 +348,13 @@ module.exports = function (Topics) {
 		}
 	}
 
-	async function guestHandleValid(data) {
+	async function guestHandleValid(
+		data: {
+		  uid: number | string,
+		  handle?: string,
+		  [key: string]: any
+		}
+	){
 		if (meta.config.allowGuestHandles && parseInt(data.uid, 10) === 0 && data.handle) {
 			if (data.handle.length > meta.config.maximumUsernameLength) {
 				throw new Error('[[error:guest-handle-invalid]]');
@@ -321,7 +366,20 @@ module.exports = function (Topics) {
 		}
 	}
 
-	async function canReply(data, topicData) {
+	async function canReply(
+		data: {
+		  tid: number,
+		  uid: number,
+		  [key: string]: any
+		},
+		topicData: {
+		  cid: number,
+		  deleted: boolean,
+		  locked: boolean,
+		  scheduled: boolean,
+		  [key: string]: any
+		}
+	){
 		if (!topicData) {
 			throw new Error('[[error:no-topic]]');
 		}

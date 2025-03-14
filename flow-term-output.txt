@@ -1,0 +1,202 @@
+(base) julies-air-4:nodebb-s25-bearries juliewu$ npm run flow
+
+> nodebb@3.8.4 flow
+> flow
+
+Error ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ src/topics/create.js:19:28
+
+Cannot build a typed interface for this module. You should annotate the exports of this module
+with types. Missing type annotation at identifier: [signature-verification-failure]
+
+     16│ const translator = require('../translator');
+     17│ const websockets = require('../socket.io');
+     18│
+     19│ module.exports = function (Topics) {
+     20│        Topics.create = async function (data) {
+     21│                // This is an internal method, consider using Topics.post instead
+     22│                const timestamp = data.timestamp || Date.now();
+
+
+Error ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ src/topics/create.js:40:14
+
+Cannot assign data.tags.join(...) to topicData.tags because property tags is missing in object
+literal [1]. [prop-missing]
+
+ [1] 26│                let topicData = {
+     27│                        tid: tid,
+     28│                        uid: data.uid,
+     29│                        cid: data.cid,
+     30│                        mainPid: 0,
+     31│                        title: data.title,
+     32│                        slug: `${tid}/${slugify(data.title) || 'topic'}`,
+     33│                        timestamp: timestamp,
+     34│                        lastposttime: 0,
+     35│                        postcount: 0,
+     36│                        viewcount: 0,
+     37│                };
+     38│
+     39│                if (Array.isArray(data.tags) && data.tags.length) {
+     40│                        topicData.tags = data.tags.join(',');
+     41│                }
+     42│
+     43│                const result = await plugins.hooks.fire('filter:topic.create', { topic: topicData, data: data });
+
+
+Error ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ src/topics/create.js:242:30
+
+Missing an annotation on data. [missing-local-annot]
+
+     239│               return postData;
+     240│       };
+     241│
+     242│       async function resolveTopic(data, tags) {
+     243│               const { tid } = data;
+     244│               // Remove unresolved tag and add resolved tag
+     245│               const topicTags = tags.map(tagItem => tagItem.value);
+
+
+Error ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ src/topics/create.js:242:36
+
+Missing an annotation on tags. [missing-local-annot]
+
+     239│               return postData;
+     240│       };
+     241│
+     242│       async function resolveTopic(data, tags) {
+     243│               const { tid } = data;
+     244│               // Remove unresolved tag and add resolved tag
+     245│               const topicTags = tags.map(tagItem => tagItem.value);
+
+
+Error ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ src/topics/create.js:259:27
+
+Missing an annotation on postData. [missing-local-annot]
+
+     256│               websockets.in(`topic_${tid}`).emit('event:topic_resolved', { topic: data });
+     257│       }
+     258│
+     259│       async function onNewPost(postData, data) {
+     260│               const { tid, uid } = postData;
+     261│               await Topics.markAsRead([tid], uid);
+     262│               const [
+
+
+Error ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ src/topics/create.js:259:37
+
+Missing an annotation on data. [missing-local-annot]
+
+     256│               websockets.in(`topic_${tid}`).emit('event:topic_resolved', { topic: data });
+     257│       }
+     258│
+     259│       async function onNewPost(postData, data) {
+     260│               const { tid, uid } = postData;
+     261│               await Topics.markAsRead([tid], uid);
+     262│               const [
+
+
+Error ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ src/topics/create.js:300:17
+
+Missing an annotation on item. [missing-local-annot]
+
+     297│               check(content, meta.config.minimumPostLength, meta.config.maximumPostLength, 'content-too-short', 'content-too-long');
+     298│       };
+     299│
+     300│       function check(item, min, max, minError, maxError) {
+     301│               // Trim and remove HTML (latter for composers that send in HTML, like redactor)
+     302│               if (typeof item === 'string') {
+     303│                       item = utils.stripHTMLTags(item).trim();
+
+
+Error ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ src/topics/create.js:300:23
+
+Missing an annotation on min. [missing-local-annot]
+
+     297│               check(content, meta.config.minimumPostLength, meta.config.maximumPostLength, 'content-too-short', 'content-too-long');
+     298│       };
+     299│
+     300│       function check(item, min, max, minError, maxError) {
+     301│               // Trim and remove HTML (latter for composers that send in HTML, like redactor)
+     302│               if (typeof item === 'string') {
+     303│                       item = utils.stripHTMLTags(item).trim();
+
+
+Error ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ src/topics/create.js:300:28
+
+Missing an annotation on max. [missing-local-annot]
+
+     297│               check(content, meta.config.minimumPostLength, meta.config.maximumPostLength, 'content-too-short', 'content-too-long');
+     298│       };
+     299│
+     300│       function check(item, min, max, minError, maxError) {
+     301│               // Trim and remove HTML (latter for composers that send in HTML, like redactor)
+     302│               if (typeof item === 'string') {
+     303│                       item = utils.stripHTMLTags(item).trim();
+
+
+Error ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ src/topics/create.js:300:33
+
+Missing an annotation on minError. [missing-local-annot]
+
+     297│               check(content, meta.config.minimumPostLength, meta.config.maximumPostLength, 'content-too-short', 'content-too-long');
+     298│       };
+     299│
+     300│       function check(item, min, max, minError, maxError) {
+     301│               // Trim and remove HTML (latter for composers that send in HTML, like redactor)
+     302│               if (typeof item === 'string') {
+     303│                       item = utils.stripHTMLTags(item).trim();
+
+
+Error ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ src/topics/create.js:300:43
+
+Missing an annotation on maxError. [missing-local-annot]
+
+     297│               check(content, meta.config.minimumPostLength, meta.config.maximumPostLength, 'content-too-short', 'content-too-long');
+     298│       };
+     299│
+     300│       function check(item, min, max, minError, maxError) {
+     301│               // Trim and remove HTML (latter for composers that send in HTML, like redactor)
+     302│               if (typeof item === 'string') {
+     303│                       item = utils.stripHTMLTags(item).trim();
+
+
+Error ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ src/topics/create.js:313:34
+
+Missing an annotation on data. [missing-local-annot]
+
+     310│               }
+     311│       }
+     312│
+     313│       async function guestHandleValid(data) {
+     314│               if (meta.config.allowGuestHandles && parseInt(data.uid, 10) === 0 && data.handle) {
+     315│                       if (data.handle.length > meta.config.maximumUsernameLength) {
+     316│                               throw new Error('[[error:guest-handle-invalid]]');
+
+
+Error ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ src/topics/create.js:325:26
+
+Missing an annotation on data. [missing-local-annot]
+
+     322│               }
+     323│       }
+     324│
+     325│       async function canReply(data, topicData) {
+     326│               if (!topicData) {
+     327│                       throw new Error('[[error:no-topic]]');
+     328│               }
+
+
+Error ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ src/topics/create.js:325:32
+
+Missing an annotation on topicData. [missing-local-annot]
+
+     322│               }
+     323│       }
+     324│
+     325│       async function canReply(data, topicData) {
+     326│               if (!topicData) {
+     327│                       throw new Error('[[error:no-topic]]');
+     328│               }
+
+
+
+Found 14 errors
