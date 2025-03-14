@@ -1,5 +1,7 @@
   {
     "compilerOptions": {
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
       "allowJs": true,
       "checkJs": false,        // Turn off type checking for JS files initially
       "outDir": "./dist",
