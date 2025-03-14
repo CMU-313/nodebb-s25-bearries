@@ -1,3 +1,5 @@
+'use strict';
+
 // test/automation/tests/basic-forum-test.js
 const { openBrowser, goto, closeBrowser } = require('taiko');
 
@@ -14,9 +16,9 @@ const { openBrowser, goto, closeBrowser } = require('taiko');
 		console.log('✓ Navigated to forum homepage');
 
 		// Wait for a moment
-		await new Promise(resolve => setTimeout(resolve, 2000));
-		console.log('✓ Waited for page to load');
-
+		await new Promise((resolve) => {
+			setTimeout(resolve, 2000);
+		});
 		console.log('test completed successfully!');
 	} catch (error) {
 		console.error('Test failed:', error);

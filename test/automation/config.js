@@ -1,3 +1,5 @@
+'use strict';
+
 // test/automation/config.js
 module.exports = {
 	// Base URL for your NodeBB instance
