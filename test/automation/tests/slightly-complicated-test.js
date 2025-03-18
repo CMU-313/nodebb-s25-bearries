@@ -4,6 +4,7 @@ const { openBrowser, goto, click, write, checkBox, closeBrowser } = require('tai
 
 (async () => {
 	try {
+        console.log('Starting slightly complicated test...');
 		await openBrowser();
 		await goto('http://localhost:4567');
 		console.log('✓ Browser opened');
