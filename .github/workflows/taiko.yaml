@@ -3,10 +3,10 @@ name: Taiko
 on:
   push:
     branches:
-      - integratetaiko
+      - main
   pull_request:
     branches:
-      - integratetaiko
+      - main
   workflow_call: # Usually called from deploy
 
 defaults:
