@@ -17,6 +17,7 @@ const { openBrowser, goto, click, write, checkBox, closeBrowser } = require('tai
 		await write('rawrrawr');
 		await click('Confirm');
 		await write('rawrrawr');
+        await click('Register Now');
 		await click(checkBox('consent'));
 		await click(checkBox('digest'));
 		await click('submit');
