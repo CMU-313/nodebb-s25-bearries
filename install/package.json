@@ -18,7 +18,7 @@
         "test:taiko": "node --test test/automation/tests/",
         "build": "flow-remove-types src/ -d lib/",
         "prepublish": "yarn run build", 
-        "flow": "flow",
+        "flow": "flow"
     },
     "nyc": {
         "exclude": [
