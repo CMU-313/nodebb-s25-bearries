@@ -23,7 +23,6 @@ const { openBrowser, goto, click, write, checkBox, closeBrowser } = require('tai
 		await click('submit');
 		console.log('✓ Registered');
 		await click('General Discussion');
-		await click('testing tags');
 	} catch (error) {
 		console.error(error);
 	} finally {
