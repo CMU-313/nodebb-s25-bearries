@@ -4,7 +4,7 @@ const { openBrowser, goto, click, write, checkBox, closeBrowser } = require('tai
 
 (async () => {
 	try {
-        console.log('Starting slightly complicated test...');
+		console.log('Starting slightly complicated test...');
 		await openBrowser();
 		await goto('http://localhost:4567');
 		console.log('✓ Browser opened');
@@ -17,7 +17,7 @@ const { openBrowser, goto, click, write, checkBox, closeBrowser } = require('tai
 		await write('rawrrawr');
 		await click('Confirm');
 		await write('rawrrawr');
-        await click('Register Now');
+		await click('Register Now');
 		await click(checkBox('consent'));
 		await click(checkBox('digest'));
 		await click('submit');
