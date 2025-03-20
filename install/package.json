@@ -15,7 +15,7 @@
         "test": "nyc --reporter=html --reporter=text-summary mocha",
         "coverage": "nyc report --reporter=text-lcov > ./coverage/lcov.info",
         "coveralls": "nyc report --reporter=text-lcov | coveralls && rm -r coverage",
-        "test:taiko": "node --test test/automation/tests/"
+        "test:taiko": "node --test test/automation/tests/",
         "build": "flow-remove-types src/ -d lib/",
         "prepublish": "yarn run build", 
         "flow": "flow",
