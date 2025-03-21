@@ -18,3 +18,17 @@ Automated tests can be found in `tests/topics.js` with the tests assessing topic
 3. If a `resolved` tag is added when an Instructor replies.
 
 These tests ensure that the main topic resolution feature is working as intended. 
+
+## Testing integration: Taiko ## 
+We integrated Taiko for our NodeBB forum application. Taiko stood out for its JavaScript-native approach and ease of use with Node.js applications.
+
+## Execution Frequency
+Taiko runs on pull requests and pushes to the main branch. We want to make sure new code passes our tests before merges. Running tests after merge gives us an additional safety check in case of conflict between PRs. 
+
+## Configurations
+Configurations added into test/automation/config.js: 
+1) headless: true -> We must have this configuration since interactions with the fake browser Taiko generates is impossible when run in our CI/CD environment
+2) slowMo: 0 -> This leads to quicker test feedback by getting rid of any extra delays
+3) timeout: 30000 -> Nodebb operations can be slow so we account for this with a larger timeout than standard
+
+## Enforcement
