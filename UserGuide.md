@@ -32,3 +32,4 @@ Configurations added into test/automation/config.js:
 3) timeout: 30000 -> Nodebb operations can be slow so we account for this with a larger timeout than standard
 
 ## Enforcement
+Taiko and lint must both pass before any PR is merged and 1 code review is required because of our branch protection rule on main! This ensures that all code that is pushed to/merged to main passes our Taiko test suite.
