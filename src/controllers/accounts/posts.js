@@ -31,6 +31,17 @@ const templateToData = {
 			return cids.map(c => `cid:${c}:uid:${userData.uid}:pids`);
 		},
 	},
+
+	// YUKICHANGE: tracking if a user reacted by account?? on the account??
+	'account/reacted': {
+		type: 'posts',
+		noItemsFoundKey: '[[user:has-no-reacted-posts]]',
+		crumb: '[[global:reacted]]',
+		getSets: function (callerUid, userData) {
+			return `uid:${userData.uid}:react`;
+		},
+	},
+
 	'account/upvoted': {
 		type: 'posts',
 		noItemsFoundKey: '[[user:has-no-upvoted-posts]]',

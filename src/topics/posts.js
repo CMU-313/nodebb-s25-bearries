@@ -117,12 +117,17 @@ module.exports = function (Topics) {
 		const [
 			bookmarks,
 			voteData,
+			// YUKICHANGE: initializing reaction data
+			// reactionData,
 			userData,
 			editors,
 			replies,
 		] = await Promise.all([
 			posts.hasBookmarked(pids, uid),
 			posts.getVoteStatusByPostIDs(pids, uid),
+			// YUKICHANGE: oh my lord --> hopefully fetches us the reactionData
+			// posts.getReactionStatusByPostIDs(pids, uid),
+
 			getPostUserData('uid', async uids => await posts.getUserInfoForPosts(uids, uid)),
 			getPostUserData('editor', async uids => await user.getUsersFields(uids, ['uid', 'username', 'userslug'])),
 			getPostReplies(postData, uid),
@@ -134,6 +139,11 @@ module.exports = function (Topics) {
 				postObj.user = postObj.uid ? userData[postObj.uid] : { ...userData[postObj.uid] };
 				postObj.editor = postObj.editor ? editors[postObj.editor] : null;
 				postObj.bookmarked = bookmarks[i];
+
+				// YUKICHANGE: added reaction data into postData
+				// postObj.reacted = reactionData.reacted[i];
+				postObj.reactions = postObj.reactions || 0;
+
 				postObj.upvoted = voteData.upvotes[i];
 				postObj.downvoted = voteData.downvotes[i];
 				postObj.votes = postObj.votes || 0;

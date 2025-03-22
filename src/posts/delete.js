@@ -76,11 +76,12 @@ module.exports = function (Posts) {
 			deleteFromCategoryRecentPosts(postData),
 			deleteFromUsersBookmarks(pids),
 			deleteFromUsersVotes(pids),
+			deleteFromUsersReactions(pids),
 			deleteFromReplies(postData),
 			deleteFromGroups(pids),
 			deleteDiffs(pids),
 			deleteFromUploads(pids),
-			db.sortedSetsRemove(['posts:pid', 'posts:votes', 'posts:flagged'], pids),
+			db.sortedSetsRemove(['posts:pid', 'posts:votes', 'posts:reactions', 'posts:flagged'], pids),
 		]);
 
 		await resolveFlags(postData, uid);
@@ -171,6 +172,25 @@ module.exports = function (Posts) {
 		});
 		await db.sortedSetRemoveBulk(bulkRemove);
 		await db.deleteAll(pids.map(pid => `pid:${pid}:users_bookmarked`));
+	}
+
+	// YUKICHANGE: mimics deleteFromUserVotes below to try get updated list of reactors...
+	async function deleteFromUsersReactions(pids) {
+		const [reactors] = await Promise.all([
+			db.getSetsMembers(pids.map(pid => `pid:${pid}:react`)),
+		]);
+		const bulkRemove = [];
+		pids.forEach((pid, index) => {
+			reactors[index].forEach((reactorUID) => {
+				bulkRemove.push([`uid:${reactorUID}:react`, pid]);
+			});
+		});
+		await Promise.all([
+			db.sortedSetRemoveBulk(bulkRemove),
+			db.deleteAll([
+				...pids.map(pid => `pid:${pid}:react`),
+			]),
+		]);
 	}
 
 	async function deleteFromUsersVotes(pids) {

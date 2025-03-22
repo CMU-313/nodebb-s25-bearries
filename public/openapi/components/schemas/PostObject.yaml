@@ -22,6 +22,9 @@ PostObject:
       type: number
     votes:
       type: number
+    # YUKICHANGE: new data field to store reactions a post get (number)
+    reactions:
+      type: number
     timestampISO:
       type: string
       description: An ISO 8601 formatted date string (complementing `timestamp`)
@@ -111,6 +114,7 @@ PostObject:
         - cid
         - title
         - slug
+        - reactions
     category:
       type: object
       properties:

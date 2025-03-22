@@ -1,0 +1,25 @@
+{
+  "name": "@textcomplete/utils",
+  "version": "0.1.13",
+  "description": "Utility functions for Textcomplete editors",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": "https://github.com/yuku/textcomplete",
+  "homepage": "https://yuku.takahashi.coffee/textcomplete",
+  "author": "Yuku Takahashi",
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "format:eslint": "eslint --fix src/**/*.ts",
+    "format:prettier": "prettier --write src/**/*.ts",
+    "format": "run-s format:eslint format:prettier",
+    "lint": "eslint src/**/*.ts"
+  },
+  "devDependencies": {
+    "@textcomplete/core": "^0.1.13"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "975b9ff3f498410195d64482956b418acdcfb1e1"
+}
