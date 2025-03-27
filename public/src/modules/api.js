@@ -142,3 +142,14 @@ export function del(route, data, onSuccess) {
 		},
 	}, onSuccess);
 }
+
+export function postReaction(postId, reaction, onSuccess) {
+	return call({
+		url: `/reactions`,
+		method: 'POST',
+		data: { postId, reaction },
+		headers: {
+			'x-csrf-token': config.csrf_token,
+		},
+	}, onSuccess);
+}

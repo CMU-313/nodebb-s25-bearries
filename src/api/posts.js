@@ -164,6 +164,50 @@ postsAPI.delete = async function (caller, data) {
 	});
 };
 
+postsAPI.react = async function (caller, { pid, emoji }) {
+	if (!utils.isNumber(pid) || !emoji) {
+		throw new Error('[[error:invalid-data]]');
+	}
+	if (!caller.uid) {
+		throw new Error('[[error:not-logged-in]]');
+	}
+
+	const canReact = await privileges.posts.can('topics:read', pid, caller.uid);
+	if (!canReact) {
+		throw new Error('[[error:no-privileges]]');
+	}
+
+	const reactions = await db.getObject(`post:${pid}:reactions`) || {};
+	reactions[emoji] = (reactions[emoji] || 0) + 1;
+
+	await db.setObject(`post:${pid}:reactions`, reactions);
+	websockets.in(`topic_${pid}`).emit('event:reaction_updated', { pid, reactions });
+
+	return { reactions };
+};
+
+postsAPI.unreact = async function (caller, { pid, emoji }) {
+	if (!utils.isNumber(pid) || !emoji) {
+		throw new Error('[[error:invalid-data]]');
+	}
+	if (!caller.uid) {
+		throw new Error('[[error:not-logged-in]]');
+	}
+
+	const reactions = await db.getObject(`post:${pid}:reactions`) || {};
+	if (reactions[emoji] && reactions[emoji] > 0) {
+		reactions[emoji] -= 1;
+		if (reactions[emoji] === 0) {
+			delete reactions[emoji];
+		}
+		await db.setObject(`post:${pid}:reactions`, reactions);
+	}
+
+	websockets.in(`topic_${pid}`).emit('event:reaction_updated', { pid, reactions });
+
+	return { reactions };
+};
+
 postsAPI.restore = async function (caller, data) {
 	await deleteOrRestore(caller, data, {
 		command: 'restore',
@@ -509,6 +553,73 @@ postsAPI.getReplies = async (caller, { pid }) => {
 	postData.forEach((postData, index) => posts.modifyPostByPrivilege(postData, postPrivileges[index]));
 	postData = postData.filter((postData, index) => postData && postPrivileges[index].read);
 	postData = await user.blocks.filter(uid, postData);
-
+	postsAPI.getReactions = async function (caller, { pid }) {
+		if (!utils.isNumber(pid)) {
+			throw new Error('[[error:invalid-data]]');
+		}
+		const canRead = await privileges.posts.can('topics:read', pid, caller.uid);
+		if (!canRead) {
+			return null;
+		}
+		const reactions = await db.getObject(`post:${pid}:reactions`) || {};
+		return { reactions };
+	};
+	postsAPI.getReactions = async function (caller, { pid }) {
+		if (!utils.isNumber(pid)) {
+			throw new Error('[[error:invalid-data]]');
+		}
+		const canRead = await privileges.posts.can('topics:read', pid, caller.uid);
+		if (!canRead) {
+			return null;
+		}
+		const reactions = await db.getObject(`post:${pid}:reactions`) || {};
+		return { reactions };
+	};
+	postsAPI.addReaction = async function (caller, { pid, emoji }) {
+		if (!utils.isNumber(pid) || !emoji) {
+			throw new Error('[[error:invalid-data]]');
+		}
+		if (!caller.uid) {
+			throw new Error('[[error:not-logged-in]]');
+		}
+	
+		const canReact = await privileges.posts.can('topics:read', pid, caller.uid);
+		if (!canReact) {
+			throw new Error('[[error:no-privileges]]');
+		}
+	
+		const reactions = await db.getObject(`post:${pid}:reactions`) || {};
+		reactions[emoji] = (reactions[emoji] || 0) + 1;
+	
+		await db.setObject(`post:${pid}:reactions`, reactions);
+	
+		websockets.in(`topic_${pid}`).emit('event:reaction_updated', { pid, reactions });
+	
+		return { reactions };
+	};
+    postsAPI.removeReaction = async function (caller, { pid, emoji }) {
+		if (!utils.isNumber(pid) || !emoji) {
+			throw new Error('[[error:invalid-data]]');
+		}
+		if (!caller.uid) {
+			throw new Error('[[error:not-logged-in]]');
+		}
+		const canReact = await privileges.posts.can('topics:read', pid, caller.uid);
+		if (!canReact) {
+			throw new Error('[[error:no-privileges]]');
+		}
+		const reactions = await db.getObject(`post:${pid}:reactions`) || {};
+		if (reactions[emoji] && reactions[emoji] > 0) {
+			reactions[emoji] -= 1;
+			if (reactions[emoji] === 0) {
+				delete reactions[emoji];
+			}
+			await db.setObject(`post:${pid}:reactions`, reactions);
+		}
+	
+		websockets.in(`topic_${pid}`).emit('event:reaction_updated', { pid, reactions });
+	
+		return { reactions };
+	};		
 	return postData;
 };
