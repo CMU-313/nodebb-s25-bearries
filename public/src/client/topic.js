@@ -79,7 +79,7 @@ define('forum/topic', [
 	};
 
 	function configurePostToggle() {
-		$(".topic").on("click", ".view-translated-btn", function () {
+		$('.topic').on('click', '.view-translated-btn', function () {
 			// Toggle the visibility of the next .translated-content div
 			$(this).closest('.sensitive-content-message').next('.translated-content').toggle();
 			// Optionally, change the button text based on visibility
